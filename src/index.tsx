@@ -550,6 +550,7 @@ class DiffViewer extends React.Component<
 			rightTitle,
 			splitView,
 			hideLineNumbers,
+			renderNodeWrapper
 		} = this.props;
 
 		if (typeof oldValue !== 'string' || typeof newValue !== 'string') {
