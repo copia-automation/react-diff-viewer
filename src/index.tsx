@@ -66,6 +66,7 @@ export interface ReactDiffViewerProps {
 	leftTitle?: string | JSX.Element;
 	// Title for left column
 	rightTitle?: string | JSX.Element;
+	renderNodeWrapper?: (node: JSX.Element, index: number) => JSX.Element
 }
 
 export interface ReactDiffViewerState {
@@ -582,7 +583,7 @@ class DiffViewer extends React.Component<
 				})}>
 				<tbody>
 					{title}
-					{nodes}
+					{renderNodeWrapper ? nodes.map((node, index) => renderNodeWrapper(node, index)) : nodes}					
 				</tbody>
 			</table>
 		);
