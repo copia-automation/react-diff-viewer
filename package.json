@@ -27,7 +27,7 @@
 		"start:examples": "webpack-dev-server --open --hot --inline",
 		"test": "mocha --require ts-node/register --require enzyme.ts ./test/**",
 		"test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/**",
-		"prepare": "yarn build:component || npm run build:component"
+		"prepare": "tsc --outDir lib/"
 	},
 	"dependencies": {
 		"classnames": "^2.2.6",
