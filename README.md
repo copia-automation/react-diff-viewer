@@ -1,5 +1,5 @@
 ## Copia Notes
-This fork contains a small modification. The ReactDiffView component now has an added renderNodeWrapper property, which is a function to render the diff nodes (aka table rows) with a wrapper. 
+This fork contains a small modification. The ReactDiffView component now has an added `renderNodeWrapper` property, which is a function to render the diff nodes (aka table rows) with a wrapper. 
 
 Keep in mind that since this package isn't published to npm, any modifications need to be built using `npm run build` and commited to this repo.
 
