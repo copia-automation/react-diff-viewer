@@ -368,3 +368,20 @@ Check package.json for more build scripts.
 ## License
 
 MIT
+
+## Publish to github package registry
+
+1. Generate a Personal Access Token (PAT)
+  a. Navigate to "github.com" > "settings"
+  b. Click on "Developer Settings"
+  c. Click on "Personal Access Tokens"
+  d. Click on "Tokens (classic)"
+  e. Click on "Generate New Token"
+  f. Enable read/write packages and create token
+  g. Save the token to 1password
+2. In your cli enter: `npm login --registry=https://npm.pkg.github.com`
+3. Enter your github username
+4. Enter your new PAT as the password
+5. If prompted, enter your email
+6. Version and run `npm publish`
+7. Navigate to the copia-automation package repository to view your package: https://github.com/copia-automation/acd-parser/pkgs/npm/acd-parser
