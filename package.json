@@ -1,6 +1,6 @@
 {
 	"name": "@copia-automation/react-diff-viewer",
-	"version": "3.1.2-0",
+	"version": "3.1.2-2",
 	"private": false,
 	"description": "A simple and beautiful text diff viewer component made with diff and React",
 	"keywords": [
@@ -18,9 +18,8 @@
 		"lib/*.d.ts"
 	],
 	"publishConfig": {
-    "registry": "https://npm.pkg.github.com"
-  },
-	"repository": "git@github.com:praneshr/react-diff-viewer.git",
+		"registry": "https://npm.pkg.github.com"
+	},
 	"license": "MIT",
 	"author": "Pranesh Ravi<praneshpranesh@gmail.com>",
 	"main": "lib/index",
@@ -41,8 +40,7 @@
 		"diff": "^4.0.1",
 		"emotion": "^10.0.14",
 		"memoize-one": "^5.0.4",
-		"prop-types": "^15.6.2",
-		"sass": "^1.84.0"
+		"prop-types": "^15.6.2"
 	},
 	"devDependencies": {
 		"@types/classnames": "^2.2.6",
@@ -51,7 +49,7 @@
 		"@types/enzyme-adapter-react-16": "^1.0.3",
 		"@types/expect": "^1.20.3",
 		"@types/memoize-one": "^4.1.1",
-		"@types/mocha": "^7.0.2",
+		"@types/mocha": "^5.2.5",
 		"@types/node": "^12.0.12",
 		"@types/react": "^16.4.14",
 		"@types/react-dom": "^16.0.8",
@@ -72,10 +70,11 @@
 		"gh-pages": "^5.0.0",
 		"html-webpack-plugin": "^3.2.0",
 		"mini-css-extract-plugin": "^0.7.0",
-		"mocha": "^7.2.0",
+		"mocha": "^6.1.4",
 		"raw-loader": "^3.0.0",
 		"react": "^16.5.2",
 		"react-dom": "^16.5.2",
+		"sass": "^1.85.0",
 		"sass-loader": "^7.1.0",
 		"spy": "^1.0.0",
 		"ts-loader": "^6.0.4",
