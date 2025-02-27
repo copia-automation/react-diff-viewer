@@ -26,11 +26,11 @@
 	"typings": "lib/index",
 	"scripts": {
 		"build": "tsc --outDir lib/",
-		"build:examples": "cross-env FORCE_COLOR=1 webpack",
+		"build:examples": "webpack",
 		"build:watch": "tsc --outDir lib/ -w",
 		"publish:examples": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist -r $GITHUB_REPO_URL",
 		"publish:examples:local": "NODE_ENV=production yarn build:examples && gh-pages -d examples/dist",
-		"start:examples": "cross-env FORCE_COLOR=1 webpack-dev-server --open",
+		"start:examples": "webpack-dev-server --open",
 		"test": "mocha --require ts-node/register --require enzyme.ts ./test/**",
 		"test:watch": "mocha --require ts-node/register --require enzyme.ts --watch-extensions ts,tsx --watch ./test/**"
 	},
@@ -56,7 +56,6 @@
 		"@types/webpack": "^5.28.5",
 		"@typescript-eslint/eslint-plugin": "^8.25.0",
 		"@typescript-eslint/parser": "^8.25.0",
-		"cross-env": "^7.0.3",
 		"css-loader": "^7.1.2",
 		"enzyme": "^3.7.0",
 		"enzyme-adapter-react-16": "^1.6.0",
