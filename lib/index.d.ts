@@ -45,8 +45,8 @@ declare class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiff
         hideLineNumbers: PropTypes.Requireable<boolean>;
         showDiffOnly: PropTypes.Requireable<boolean>;
         highlightLines: PropTypes.Requireable<string[]>;
-        leftTitle: PropTypes.Requireable<string | PropTypes.ReactElementLike>;
-        rightTitle: PropTypes.Requireable<string | PropTypes.ReactElementLike>;
+        leftTitle: PropTypes.Requireable<NonNullable<string | PropTypes.ReactElementLike>>;
+        rightTitle: PropTypes.Requireable<NonNullable<string | PropTypes.ReactElementLike>>;
         linesOffset: PropTypes.Requireable<number>;
     };
     constructor(props: ReactDiffViewerProps);
