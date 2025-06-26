@@ -1,4 +1,4 @@
-import * as expect from 'expect';
+import expect from 'expect';
 import { computeLineInformation, DiffMethod } from '../src/compute-lines';
 
 describe('Testing compute lines utils', (): void => {

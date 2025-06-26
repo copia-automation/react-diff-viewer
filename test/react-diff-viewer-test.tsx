@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import * as expect from 'expect';
+import expect from 'expect';
 
 import DiffViewer from '../lib/index';
 
