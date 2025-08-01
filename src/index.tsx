@@ -24,6 +24,16 @@ export enum LineNumberPrefix {
 	RIGHT = 'R',
 }
 
+type SkippedLineProps = {
+	num: number,
+	blockNumber: number,
+	leftBlockLineNumber: number,
+	rightBlockLineNumber: number,
+}
+
+interface LineInformationProps extends LineInformation {
+	index: number;
+}
 export interface ReactDiffViewerProps {
 	// Old value to compare.
 	oldValue: string;
@@ -44,13 +54,13 @@ export interface ReactDiffViewerProps {
 	// Show only diff between the two values.
 	showDiffOnly?: boolean;
 	// Render prop to format final string before displaying them in the UI.
-	renderContent?: (source: string) => JSX.Element;
+	renderContent?: (source: string) => React.ReactElement;
 	// Render prop to format code fold message.
 	codeFoldMessageRenderer?: (
 		totalFoldedLines: number,
 		leftStartLineNumber: number,
 		rightStartLineNumber: number,
-	) => JSX.Element;
+	) => React.ReactElement;
 	// Event handler for line number click.
 	onLineNumberClick?: (
 		lineId: string,
@@ -63,10 +73,10 @@ export interface ReactDiffViewerProps {
 	// Use dark theme.
 	useDarkTheme?: boolean;
 	// Title for left column
-	leftTitle?: string | JSX.Element;
+	leftTitle?: string | React.ReactElement;
 	// Title for left column
-	rightTitle?: string | JSX.Element;
-	renderNodeWrapper?: (node: JSX.Element, index: number) => JSX.Element
+	rightTitle?: string | React.ReactElement;
+	renderNodeWrapper?: (node: React.ReactElement, index: number) => React.ReactElement
 }
 
 export interface ReactDiffViewerState {
@@ -180,10 +190,10 @@ class DiffViewer extends React.Component<
 	 */
 	private renderWordDiff = (
 		diffArray: DiffInformation[],
-		renderer?: (chunk: string) => JSX.Element,
-	): JSX.Element[] => {
+		renderer?: (chunk: string) => React.ReactElement,
+	): React.ReactElement[] => {
 		return diffArray.map(
-			(wordDiff, i): JSX.Element => {
+			(wordDiff, i): React.ReactElement => {
 				return (
 					<span
 						key={i}
@@ -191,7 +201,7 @@ class DiffViewer extends React.Component<
 							[this.styles.wordAdded]: wordDiff.type === DiffType.ADDED,
 							[this.styles.wordRemoved]: wordDiff.type === DiffType.REMOVED,
 						})}>
-						{renderer ? renderer(wordDiff.value as string) : wordDiff.value}
+						{renderer ? renderer(wordDiff.value as string) : wordDiff.value as string}
 					</span>
 				);
 			},
@@ -218,7 +228,7 @@ class DiffViewer extends React.Component<
 		value: string | DiffInformation[],
 		additionalLineNumber?: number,
 		additionalPrefix?: LineNumberPrefix,
-	): JSX.Element => {
+	): React.ReactElement => {
 		const lineNumberTemplate = `${prefix}-${lineNumber}`;
 		const additionalLineNumberTemplate = `${additionalPrefix}-${additionalLineNumber}`;
 		const highlightLine =
@@ -302,7 +312,7 @@ class DiffViewer extends React.Component<
 	private renderSplitView = (
 		{ left, right }: LineInformation,
 		index: number,
-	): JSX.Element => {
+	): React.ReactElement => {
 		return (
 			<tr key={index} className={this.styles.line}>
 				{this.renderLine(
@@ -332,7 +342,7 @@ class DiffViewer extends React.Component<
 	public renderInlineView = (
 		{ left, right }: LineInformation,
 		index: number,
-	): JSX.Element => {
+	): React.ReactElement => {
 		let content;
 		if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
 			return (
@@ -411,12 +421,12 @@ class DiffViewer extends React.Component<
 	 * @param leftBlockLineNumber First left line number after the current code fold block.
 	 * @param rightBlockLineNumber First right line number after the current code fold block.
 	 */
-	private renderSkippedLineIndicator = (
-		num: number,
-		blockNumber: number,
-		leftBlockLineNumber: number,
-		rightBlockLineNumber: number,
-	): JSX.Element => {
+	private renderSkippedLineIndicator = ({
+		num,
+		blockNumber,
+		leftBlockLineNumber,
+		rightBlockLineNumber,
+	}: SkippedLineProps): React.ReactElement => {
 		const { hideLineNumbers, splitView } = this.props;
 		const message = this.props.codeFoldMessageRenderer ? (
 			this.props.codeFoldMessageRenderer(
@@ -468,7 +478,7 @@ class DiffViewer extends React.Component<
 	/**
 	 * Generates the entire diff view.
 	 */
-	private renderDiff = (): JSX.Element[] => {
+	private getLinesToRender = (): Array<SkippedLineProps | LineInformationProps> => {
 		const {
 			oldValue,
 			newValue,
@@ -489,8 +499,11 @@ class DiffViewer extends React.Component<
 				? 0
 				: this.props.extraLinesSurroundingDiff;
 		let skippedLines: number[] = [];
-		return lineInformation.map(
-			(line: LineInformation, i: number): JSX.Element => {
+
+		const lines: Array<SkippedLineProps | LineInformationProps> = []
+
+		lineInformation.forEach(
+			(line: LineInformation, i: number): React.ReactElement => {
 				const diffBlockStart = diffLines[0];
 				const currentPosition = diffBlockStart - i;
 				if (this.props.showDiffOnly) {
@@ -506,42 +519,61 @@ class DiffViewer extends React.Component<
 					) {
 						skippedLines.push(i + 1);
 						if (i === lineInformation.length - 1 && skippedLines.length > 1) {
-							return this.renderSkippedLineIndicator(
-								skippedLines.length,
-								diffBlockStart,
-								line.left.lineNumber,
-								line.right.lineNumber,
+							lines.push(
+								{
+									num: skippedLines.length,
+									blockNumber: diffBlockStart,
+									leftBlockLineNumber: line.left.lineNumber,
+									rightBlockLineNumber: line.right.lineNumber,
+								}
 							);
+							return 
 						}
 						return null;
 					}
 				}
 
-				const diffNodes = splitView
-					? this.renderSplitView(line, i)
-					: this.renderInlineView(line, i);
+				// const diffNodes = splitView
+				// 	? this.renderSplitView(line, i)
+				// 	: this.renderInlineView(line, i);
 
 				if (currentPosition === extraLines && skippedLines.length > 0) {
 					const { length } = skippedLines;
 					skippedLines = [];
-					return (
-						<React.Fragment key={i}>
-							{this.renderSkippedLineIndicator(
-								length,
-								diffBlockStart,
-								line.left.lineNumber,
-								line.right.lineNumber,
-							)}
-							{diffNodes}
-						</React.Fragment>
+					lines.push(
+						{
+							num: length,
+							blockNumber: diffBlockStart,
+							leftBlockLineNumber: line.left.lineNumber,
+							rightBlockLineNumber: line.right.lineNumber,
+						}
 					);
+					return
+					// return (
+					// 	<React.Fragment key={i}>
+					// 		{this.renderSkippedLineIndicator({
+					// 			num: length,
+					// 			blockNumber: diffBlockStart,
+					// 			leftBlockLineNumber: line.left.lineNumber,
+					// 			rightBlockLineNumber: line.right.lineNumber,
+					// 		})}
+					// 		{diffNodes}
+					// 	</React.Fragment>
+					// );
 				}
-				return diffNodes;
+				lines.push({
+					...line,
+					index: i,
+				});
+				// return diffNodes;
+				return
 			},
 		);
+
+		return lines
 	};
 
-	public render = (): JSX.Element => {
+	public render = (): React.ReactElement => {
 		const {
 			oldValue,
 			newValue,
@@ -558,7 +590,7 @@ class DiffViewer extends React.Component<
 		}
 
 		this.styles = this.computeStyles(this.props.styles, useDarkTheme);
-		const nodes = this.renderDiff();
+		const linesToRender = this.getLinesToRender();
 		const colSpanOnSplitView = hideLineNumbers ? 2 : 3;
 		const colSpanOnInlineView = hideLineNumbers ? 2 : 4;
 
@@ -576,7 +608,7 @@ class DiffViewer extends React.Component<
 				)}
 			</tr>
 		);
-
+console.log({linesToRender})
 		return (
 			<table
 				className={cn(this.styles.diffContainer, {
@@ -584,11 +616,52 @@ class DiffViewer extends React.Component<
 				})}>
 				<tbody>
 					{title}
-					{renderNodeWrapper ? nodes.map((node, index) => renderNodeWrapper(node, index)) : nodes}					
+					{linesToRender.slice(0,1000).map((line, i) => {
+						let node: React.ReactElement
+						if (typeof line === 'object' && 'num' in line) {
+							node = this.renderSkippedLineIndicator(line as SkippedLineProps);
+						} else {
+
+							
+							const { index: lineIndex, ...lineProps } = line as LineInformationProps;
+							// const lineInfo = line as LineInformationProps;
+							node = splitView
+							? this.renderSplitView(lineProps, lineIndex)
+							: this.renderInlineView(lineProps, lineIndex);
+						}
+						return (
+							<RenderNode
+								key={i}
+								index={i}
+								renderNodeWrapper={renderNodeWrapper}>
+								{node}
+							</RenderNode>
+						);
+					})}
+					{/* {renderNodeWrapper ? nodes.map((node, index) => renderNodeWrapper(node, index)) : nodes}					 */}
 				</tbody>
 			</table>
 		);
 	};
+}
+
+function RenderNode({
+	renderNodeWrapper,
+	index,
+	children
+}: {
+	renderNodeWrapper?: (node: React.ReactElement, index: number) => React.ReactElement,
+	children: React.ReactElement
+	index: number;
+}): React.ReactElement {
+	if (renderNodeWrapper) {
+		return (
+			<>
+				{renderNodeWrapper(children, index)}
+			</>
+		);
+	}
+	return <>{children}</>;
 }
 
 export default DiffViewer;

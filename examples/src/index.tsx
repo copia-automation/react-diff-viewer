@@ -4,6 +4,8 @@ import * as ReactDOM from 'react-dom';
 
 import ReactDiff, { DiffMethod } from '../../lib/index';
 
+import { createRoot } from 'react-dom/client';
+
 const oldJs = require('./diff/javascript/old.rjs').default;
 const newJs = require('./diff/javascript/new.rjs').default;
 
@@ -33,8 +35,8 @@ class Example extends React.Component<{}, ExampleState> {
     e: React.MouseEvent<HTMLTableCellElement>,
   ): void => {
     let highlightLine = [id];
-    if (e.shiftKey && this.state.highlightLine.length === 1) {
-      const [dir, oldId] = this.state.highlightLine[0].split('-');
+    if (e.shiftKey && this.state.highlightLine?.length === 1) {
+      const [dir, oldId] = this.state.highlightLine?.[0].split('-');
       const [newDir, newId] = id.split('-');
       if (dir === newDir) {
         highlightLine = [];
@@ -56,7 +58,7 @@ class Example extends React.Component<{}, ExampleState> {
     return <span dangerouslySetInnerHTML={{ __html: language }} />;
   };
 
-  public render(): JSX.Element {
+  public render(): React.ReactElement {
 
     return (
       <div className="react-diff-viewer-example">
@@ -87,12 +89,13 @@ class Example extends React.Component<{}, ExampleState> {
         <div className="diff-viewer">
           <ReactDiff
             highlightLines={this.state.highlightLine}
+            compareMethod={DiffMethod.WORDS_WITH_SPACE}
             onLineNumberClick={this.onLineNumberClick}
             oldValue={oldJs}
             splitView
             newValue={newJs}
             renderContent={this.syntaxHighlight}
-            useDarkTheme
+            // useDarkTheme
             leftTitle="webpack.config.js master@2178133 - pushed 2 hours ago."
             rightTitle="webpack.config.js master@64207ee - pushed 13 hours ago."
           />
@@ -108,4 +111,5 @@ class Example extends React.Component<{}, ExampleState> {
   }
 }
 
-ReactDOM.render(<Example />, document.getElementById('app'));
+const root = createRoot(document.getElementById('app') as HTMLElement);
+root.render(<Example />);

@@ -152,7 +152,7 @@ const computeLineInformation = (
 		{
 			newlineIsToken: true,
 			ignoreWhitespace: false,
-			ignoreCase: false,
+			// ignoreCase: false,
 		},
 	);
 	let rightLineNumber = linesOffset;

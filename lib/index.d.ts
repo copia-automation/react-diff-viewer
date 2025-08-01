@@ -16,15 +16,15 @@ export interface ReactDiffViewerProps {
     extraLinesSurroundingDiff?: number;
     hideLineNumbers?: boolean;
     showDiffOnly?: boolean;
-    renderContent?: (source: string) => JSX.Element;
-    codeFoldMessageRenderer?: (totalFoldedLines: number, leftStartLineNumber: number, rightStartLineNumber: number) => JSX.Element;
+    renderContent?: (source: string) => React.ReactElement;
+    codeFoldMessageRenderer?: (totalFoldedLines: number, leftStartLineNumber: number, rightStartLineNumber: number) => React.ReactElement;
     onLineNumberClick?: (lineId: string, event: React.MouseEvent<HTMLTableCellElement>) => void;
     highlightLines?: string[];
     styles?: ReactDiffViewerStylesOverride;
     useDarkTheme?: boolean;
-    leftTitle?: string | JSX.Element;
-    rightTitle?: string | JSX.Element;
-    renderNodeWrapper?: (node: JSX.Element, index: number) => JSX.Element;
+    leftTitle?: string | React.ReactElement;
+    rightTitle?: string | React.ReactElement;
+    renderNodeWrapper?: (node: React.ReactElement, index: number) => React.ReactElement;
 }
 export interface ReactDiffViewerState {
     expandedBlocks?: number[];
@@ -112,7 +112,7 @@ declare class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiff
      * @param obj.right Life diff information for the removed section of the inline view.
      * @param index React key for the lines.
      */
-    renderInlineView: ({ left, right }: LineInformation, index: number) => JSX.Element;
+    renderInlineView: ({ left, right }: LineInformation, index: number) => React.ReactElement;
     /**
      * Returns a function with clicked block number in the closure.
      *
@@ -132,8 +132,8 @@ declare class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiff
     /**
      * Generates the entire diff view.
      */
-    private renderDiff;
-    render: () => JSX.Element;
+    private getLinesToRender;
+    render: () => React.ReactElement;
 }
 export default DiffViewer;
 export { ReactDiffViewerStylesOverride, DiffMethod };
