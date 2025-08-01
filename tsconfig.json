@@ -8,7 +8,7 @@
     "target": "es5",
     "declaration": true,
     "downlevelIteration": true,
-    "lib": ["es2017", "dom"],
+    "lib": ["es2019", "dom"],
     "types": [
       "mocha",
       "node"

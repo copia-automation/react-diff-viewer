@@ -27,7 +27,7 @@ export interface ReactDiffViewerProps {
     renderNodeWrapper?: (node: React.ReactElement, index: number) => React.ReactElement;
 }
 export interface ReactDiffViewerState {
-    expandedBlocks?: number[];
+    expandedBlocks?: Set<number>;
 }
 declare class DiffViewer extends React.Component<ReactDiffViewerProps, ReactDiffViewerState> {
     private styles;

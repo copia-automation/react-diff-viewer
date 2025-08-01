@@ -81,7 +81,7 @@ export interface ReactDiffViewerProps {
 
 export interface ReactDiffViewerState {
 	// Array holding the expanded code folding.
-	expandedBlocks?: number[];
+	expandedBlocks?: Set<number>;
 }
 
 class DiffViewer extends React.Component<
@@ -127,7 +127,7 @@ class DiffViewer extends React.Component<
 		super(props);
 
 		this.state = {
-			expandedBlocks: [],
+			expandedBlocks: new Set<number>(),
 		};
 	}
 
@@ -136,9 +136,9 @@ class DiffViewer extends React.Component<
 	 * refs.
 	 */
 	public resetCodeBlocks = (): boolean => {
-		if (this.state.expandedBlocks.length > 0) {
+		if (this.state.expandedBlocks.size > 0) {
 			this.setState({
-				expandedBlocks: [],
+				expandedBlocks: new Set<number>(),
 			});
 			return true;
 		}
@@ -150,11 +150,10 @@ class DiffViewer extends React.Component<
 	 * this value is used to expand/fold unmodified code.
 	 */
 	private onBlockExpand = (id: number): void => {
-		const prevState = this.state.expandedBlocks.slice();
-		prevState.push(id);
+		const newState = this.state.expandedBlocks.add(id)
 
 		this.setState({
-			expandedBlocks: prevState,
+			expandedBlocks: newState,
 		});
 	};
 
@@ -499,23 +498,23 @@ class DiffViewer extends React.Component<
 				? 0
 				: this.props.extraLinesSurroundingDiff;
 		let skippedLines: number[] = [];
-
+		let diffLinesIndex = 0;
 		const lines: Array<SkippedLineProps | LineInformationProps> = []
 
 		lineInformation.forEach(
 			(line: LineInformation, i: number): React.ReactElement => {
-				const diffBlockStart = diffLines[0];
+				const diffBlockStart = diffLines[diffLinesIndex];
 				const currentPosition = diffBlockStart - i;
 				if (this.props.showDiffOnly) {
 					if (currentPosition === -extraLines) {
 						skippedLines = [];
-						diffLines.shift();
+						diffLinesIndex = diffLinesIndex + 1
 					}
 					if (
 						line.left.type === DiffType.DEFAULT &&
 						(currentPosition > extraLines ||
 							typeof diffBlockStart === 'undefined') &&
-						!this.state.expandedBlocks.includes(diffBlockStart)
+						!this.state.expandedBlocks.has(diffBlockStart)
 					) {
 						skippedLines.push(i + 1);
 						if (i === lineInformation.length - 1 && skippedLines.length > 1) {
@@ -533,10 +532,6 @@ class DiffViewer extends React.Component<
 					}
 				}
 
-				// const diffNodes = splitView
-				// 	? this.renderSplitView(line, i)
-				// 	: this.renderInlineView(line, i);
-
 				if (currentPosition === extraLines && skippedLines.length > 0) {
 					const { length } = skippedLines;
 					skippedLines = [];
@@ -549,23 +544,11 @@ class DiffViewer extends React.Component<
 						}
 					);
 					return
-					// return (
-					// 	<React.Fragment key={i}>
-					// 		{this.renderSkippedLineIndicator({
-					// 			num: length,
-					// 			blockNumber: diffBlockStart,
-					// 			leftBlockLineNumber: line.left.lineNumber,
-					// 			rightBlockLineNumber: line.right.lineNumber,
-					// 		})}
-					// 		{diffNodes}
-					// 	</React.Fragment>
-					// );
 				}
 				lines.push({
 					...line,
 					index: i,
 				});
-				// return diffNodes;
 				return
 			},
 		);
@@ -574,6 +557,7 @@ class DiffViewer extends React.Component<
 	};
 
 	public render = (): React.ReactElement => {
+		const startTime = performance.now();
 		const {
 			oldValue,
 			newValue,
@@ -590,7 +574,7 @@ class DiffViewer extends React.Component<
 		}
 
 		this.styles = this.computeStyles(this.props.styles, useDarkTheme);
-		const linesToRender = this.getLinesToRender();
+		const linesToRender = this.getLinesToRender().slice(0, 100);
 		const colSpanOnSplitView = hideLineNumbers ? 2 : 3;
 		const colSpanOnInlineView = hideLineNumbers ? 2 : 4;
 
@@ -608,7 +592,9 @@ class DiffViewer extends React.Component<
 				)}
 			</tr>
 		);
-console.log({linesToRender})
+// console.log({linesToRender})
+		const preRender = performance.now()
+		console.log('ready to render', preRender - startTime, 'ms');
 		return (
 			<table
 				className={cn(this.styles.diffContainer, {
@@ -616,7 +602,7 @@ console.log({linesToRender})
 				})}>
 				<tbody>
 					{title}
-					{linesToRender.slice(0,1000).map((line, i) => {
+					{linesToRender.slice(0,100).map((line, i) => {
 						let node: React.ReactElement
 						if (typeof line === 'object' && 'num' in line) {
 							node = this.renderSkippedLineIndicator(line as SkippedLineProps);

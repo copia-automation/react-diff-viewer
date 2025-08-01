@@ -146,15 +146,19 @@ const computeLineInformation = (
 	compareMethod: string = DiffMethod.CHARS,
 	linesOffset: number = 0,
 ): ComputedLineInformation => {
+	const t_a = performance.now();
 	const diffArray = diff.diffLines(
-		oldString.trimRight(),
-		newString.trimRight(),
+		oldString,//.trimRight(),
+		newString,//.trimRight(),
 		{
 			newlineIsToken: true,
 			ignoreWhitespace: false,
 			// ignoreCase: false,
 		},
 	);
+
+	const t_b = performance.now();
+	console.log('diffLines took ' + (t_b - t_a) + ' ms');
 	let rightLineNumber = linesOffset;
 	let leftLineNumber = linesOffset;
 	let lineInformation: LineInformation[] = [];
@@ -168,18 +172,20 @@ const computeLineInformation = (
 		removed?: boolean,
 		evaluateOnlyFirstLine?: boolean,
 	): LineInformation[] => {
+		// const t0 = performance.now();
 		const lines = constructLines(value);
-
+// const t1 = performance.now();
+// console.log('constructLines took ' + (t1 - t0) + ' ms');
 		return lines
-			.map(
-				(line: string, lineIndex): LineInformation => {
+			.flatMap(
+				(line: string, lineIndex): LineInformation[] => {
 					const left: DiffInformation = {};
 					const right: DiffInformation = {};
 					if (
 						ignoreDiffIndexes.includes(`${diffIndex}-${lineIndex}`) ||
 						(evaluateOnlyFirstLine && lineIndex !== 0)
 					) {
-						return undefined;
+						return [];
 					}
 					if (added || removed) {
 						if (!diffLines.includes(counter)) {
@@ -220,11 +226,16 @@ const computeLineInformation = (
 									if (disableWordDiff) {
 										right.value = rightValue;
 									} else {
+										// const t00 = performance.now();
 										const computedDiff = computeDiff(
 											line,
 											rightValue as string,
 											compareMethod,
 										);
+										// const t11 = performance.now();
+										// console.log(
+										// 	'computeDiff took ' + (t11 - t00) + ' ms',
+										// );
 										right.value = computedDiff.right;
 										left.value = computedDiff.left;
 									}
@@ -249,17 +260,22 @@ const computeLineInformation = (
 					}
 
 					counter += 1;
-					return { right, left };
+					lineInformation.push({
+						left,
+						right,
+					});
+					return [{ right, left }];
 				},
 			)
-			.filter(Boolean);
+			// .filter(Boolean);
 	};
 
 	diffArray.forEach(({ added, removed, value }: diff.Change, index): void => {
-		lineInformation = [
-			...lineInformation,
-			...getLineInformation(value, index, added, removed),
-		];
+		getLineInformation(value, index, added, removed);
+		// lineInformation = [
+		// 	...lineInformation,
+		// 	...getLineInformation(value, index, added, removed),
+		// ];
 	});
 
 	return {
