@@ -1,19 +1,14 @@
-import { ReactDiffViewerProps } from '.';
+import { ReactDiffViewerProps } from ".";
 import {
   computeLineInformation,
   LineInformation,
-  DiffInformation,
   DiffType,
-  DiffMethod,
-} from './compute-lines';
-import computeStyles, {
-  ReactDiffViewerStylesOverride,
-  ReactDiffViewerStyles,
-} from './styles';
+} from "./compute-lines";
+import { ReactDiffViewerStyles } from "./styles";
 
 export enum LineNumberPrefix {
-  LEFT = 'L',
-  RIGHT = 'R',
+  LEFT = "L",
+  RIGHT = "R",
 }
 
 export type SkippedLineProps = {
@@ -54,7 +49,8 @@ function getLinesToRender(
     compareMethod,
     linesOffset,
   );
-  const extraLines = renderProps.extraLinesSurroundingDiff < 0
+  const extraLines =
+    renderProps.extraLinesSurroundingDiff < 0
       ? 0
       : renderProps.extraLinesSurroundingDiff;
   let skippedLines: number[] = [];
@@ -71,10 +67,10 @@ function getLinesToRender(
           diffLinesIndex += 1;
         }
         if (
-          line.left.type === DiffType.DEFAULT
-          && (currentPosition > extraLines
-            || typeof diffBlockStart === 'undefined')
-          && !expandedBlockIdsSet.has(diffBlockStart)
+          line.left.type === DiffType.DEFAULT &&
+          (currentPosition > extraLines ||
+            typeof diffBlockStart === "undefined") &&
+          !expandedBlockIdsSet.has(diffBlockStart)
         ) {
           skippedLines.push(i + 1);
           if (i === lineInformation.length - 1 && skippedLines.length > 1) {

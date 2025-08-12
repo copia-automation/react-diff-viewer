@@ -1,8 +1,8 @@
-import expect from 'expect';
-import { computeLineInformation, DiffMethod } from '../src/compute-lines';
+import { describe, it, expect } from "vitest";
+import { computeLineInformation, DiffMethod } from "../src/compute-lines.ts";
 
-describe('Testing compute lines utils', (): void => {
-  it('Should it avoid trailing spaces', (): void => {
+describe("Testing compute lines utils", () => {
+  it("Should it avoid trailing spaces", () => {
     const oldCode = `test
 
 
@@ -17,12 +17,12 @@ describe('Testing compute lines utils', (): void => {
           left: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
           right: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
         },
       ],
@@ -30,8 +30,8 @@ describe('Testing compute lines utils', (): void => {
     });
   });
 
-  it('Should identify line addition', (): void => {
-    const oldCode = 'test';
+  it("Should identify line addition", () => {
+    const oldCode = "test";
     const newCode = `test
     newLine`;
 
@@ -41,19 +41,19 @@ describe('Testing compute lines utils', (): void => {
           right: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
           left: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
         },
         {
           right: {
             lineNumber: 2,
             type: 1,
-            value: '    newLine',
+            value: "    newLine",
           },
           left: {},
         },
@@ -62,10 +62,10 @@ describe('Testing compute lines utils', (): void => {
     });
   });
 
-  it('Should identify line deletion', (): void => {
+  it("Should identify line deletion", () => {
     const oldCode = `test
     oldLine`;
-    const newCode = 'test';
+    const newCode = "test";
 
     expect(computeLineInformation(oldCode, newCode)).toMatchObject({
       lineInformation: [
@@ -73,12 +73,12 @@ describe('Testing compute lines utils', (): void => {
           right: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
           left: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
         },
         {
@@ -86,7 +86,7 @@ describe('Testing compute lines utils', (): void => {
           left: {
             lineNumber: 2,
             type: 2,
-            value: '    oldLine',
+            value: "    oldLine",
           },
         },
       ],
@@ -94,7 +94,7 @@ describe('Testing compute lines utils', (): void => {
     });
   });
 
-  it('Should identify line modification', (): void => {
+  it("Should identify line modification", () => {
     const oldCode = `test
     oldLine`;
     const newCode = `test
@@ -106,24 +106,24 @@ describe('Testing compute lines utils', (): void => {
           right: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
           left: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
         },
         {
           right: {
             lineNumber: 2,
             type: 1,
-            value: '    newLine',
+            value: "    newLine",
           },
           left: {
             lineNumber: 2,
             type: 2,
-            value: '    oldLine',
+            value: "    oldLine",
           },
         },
       ],
@@ -131,7 +131,7 @@ describe('Testing compute lines utils', (): void => {
     });
   });
 
-  it('Should identify word diff', (): void => {
+  it("Should identify word diff", () => {
     const oldCode = `test
     oldLine`;
     const newCode = `test
@@ -143,12 +143,12 @@ describe('Testing compute lines utils', (): void => {
           right: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
           left: {
             lineNumber: 1,
             type: 0,
-            value: 'test',
+            value: "test",
           },
         },
         {
@@ -158,15 +158,15 @@ describe('Testing compute lines utils', (): void => {
             value: [
               {
                 type: 0,
-                value: '    ',
+                value: "    ",
               },
               {
                 type: 1,
-                value: 'new',
+                value: "new",
               },
               {
                 type: 0,
-                value: 'Line',
+                value: "Line",
               },
             ],
           },
@@ -176,15 +176,15 @@ describe('Testing compute lines utils', (): void => {
             value: [
               {
                 type: 0,
-                value: '    ',
+                value: "    ",
               },
               {
                 type: 2,
-                value: 'old',
+                value: "old",
               },
               {
                 type: 0,
-                value: 'Line',
+                value: "Line",
               },
             ],
           },
@@ -194,8 +194,8 @@ describe('Testing compute lines utils', (): void => {
     });
   });
 
-  it('Should call "diffChars" jsDiff method when compareMethod is not provided', (): void => {
-    const oldCode = 'Hello World';
+  it('Should call "diffChars" jsDiff method when compareMethod is not provided', () => {
+    const oldCode = "Hello World";
     const newCode = `My Updated Name
 Also this info`;
 
@@ -208,23 +208,23 @@ Also this info`;
             value: [
               {
                 type: 1,
-                value: 'My Updat',
+                value: "My Updat",
               },
               {
                 type: 0,
-                value: 'e',
+                value: "e",
               },
               {
                 type: 1,
-                value: 'd',
+                value: "d",
               },
               {
                 type: 0,
-                value: ' ',
+                value: " ",
               },
               {
                 type: 1,
-                value: 'Name',
+                value: "Name",
               },
             ],
           },
@@ -234,23 +234,23 @@ Also this info`;
             value: [
               {
                 type: 2,
-                value: 'H',
+                value: "H",
               },
               {
                 type: 0,
-                value: 'e',
+                value: "e",
               },
               {
                 type: 2,
-                value: 'llo',
+                value: "llo",
               },
               {
                 type: 0,
-                value: ' ',
+                value: " ",
               },
               {
                 type: 2,
-                value: 'World',
+                value: "World",
               },
             ],
           },
@@ -259,7 +259,7 @@ Also this info`;
           right: {
             lineNumber: 2,
             type: 1,
-            value: 'Also this info',
+            value: "Also this info",
           },
           left: {},
         },
@@ -268,8 +268,8 @@ Also this info`;
     });
   });
 
-  it('Should call "diffWords" jsDiff method when a compareMethod IS provided', (): void => {
-    const oldCode = 'Hello World';
+  it('Should call "diffWords" jsDiff method when a compareMethod IS provided', () => {
+    const oldCode = "Hello World";
     const newCode = `My Updated Name
 Also this info`;
 
@@ -284,15 +284,15 @@ Also this info`;
             value: [
               {
                 type: 1,
-                value: 'My',
+                value: "My",
               },
               {
                 type: 0,
-                value: ' ',
+                value: " ",
               },
               {
                 type: 1,
-                value: 'Updated Name',
+                value: "Updated Name",
               },
             ],
           },
@@ -302,15 +302,15 @@ Also this info`;
             value: [
               {
                 type: 2,
-                value: 'Hello',
+                value: "Hello",
               },
               {
                 type: 0,
-                value: ' ',
+                value: " ",
               },
               {
                 type: 2,
-                value: 'World',
+                value: "World",
               },
             ],
           },
@@ -319,7 +319,7 @@ Also this info`;
           right: {
             lineNumber: 2,
             type: 1,
-            value: 'Also this info',
+            value: "Also this info",
           },
           left: {},
         },
@@ -328,8 +328,8 @@ Also this info`;
     });
   });
 
-  it('Should not call jsDiff method and not diff text when disableWordDiff is true', (): void => {
-    const oldCode = 'Hello World';
+  it("Should not call jsDiff method and not diff text when disableWordDiff is true", () => {
+    const oldCode = "Hello World";
     const newCode = `My Updated Name
 Also this info`;
 
@@ -339,19 +339,19 @@ Also this info`;
           right: {
             lineNumber: 1,
             type: 1,
-            value: 'My Updated Name',
+            value: "My Updated Name",
           },
           left: {
             lineNumber: 1,
             type: 2,
-            value: 'Hello World',
+            value: "Hello World",
           },
         },
         {
           right: {
             lineNumber: 2,
             type: 1,
-            value: 'Also this info',
+            value: "Also this info",
           },
           left: {},
         },
@@ -360,8 +360,8 @@ Also this info`;
     });
   });
 
-  it('Should start line counting from offset', (): void => {
-    const oldCode = 'Hello World';
+  it("Should start line counting from offset", () => {
+    const oldCode = "Hello World";
     const newCode = `My Updated Name
 Also this info`;
 
@@ -373,19 +373,19 @@ Also this info`;
           right: {
             lineNumber: 6,
             type: 1,
-            value: 'My Updated Name',
+            value: "My Updated Name",
           },
           left: {
             lineNumber: 6,
             type: 2,
-            value: 'Hello World',
+            value: "Hello World",
           },
         },
         {
           right: {
             lineNumber: 7,
             type: 1,
-            value: 'Also this info',
+            value: "Also this info",
           },
           left: {},
         },

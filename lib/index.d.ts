@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { DiffMethod } from './compute-lines';
-import { ReactDiffViewerStylesOverride } from './styles';
+import * as React from "react";
+import { DiffMethod } from "./compute-lines";
+import { ReactDiffViewerStylesOverride } from "./styles";
 export interface ReactDiffViewerProps {
     oldValue: string;
     newValue: string;
@@ -20,9 +20,6 @@ export interface ReactDiffViewerProps {
     leftTitle?: string | React.ReactElement;
     rightTitle?: string | React.ReactElement;
     renderNodeWrapper?: (node: React.ReactElement, index: number) => React.ReactElement;
-}
-export interface ReactDiffViewerState {
-    expandedBlocks?: Set<number>;
 }
 declare function DiffViewer({ oldValue, newValue, splitView, highlightLines, disableWordDiff, compareMethod, styles: styleOverrides, hideLineNumbers, extraLinesSurroundingDiff, showDiffOnly, useDarkTheme, linesOffset, ...rest }: ReactDiffViewerProps): React.JSX.Element;
 export default DiffViewer;

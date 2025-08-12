@@ -1,5 +1,5 @@
-import { Interpolation } from '@emotion/react';
-import { css, cx } from '@emotion/css';
+import { Interpolation } from "@emotion/react";
+import { css, cx } from "@emotion/css";
 
 export interface ReactDiffViewerStyles {
   diffContainer?: string;
@@ -87,59 +87,59 @@ export default (
   const themeVariables = {
     light: {
       ...{
-        diffViewerBackground: '#fff',
-        diffViewerColor: '#212529',
-        addedBackground: '#e6ffed',
-        addedColor: '#24292e',
-        removedBackground: '#ffeef0',
-        removedColor: '#24292e',
-        wordAddedBackground: '#acf2bd',
-        wordRemovedBackground: '#fdb8c0',
-        addedGutterBackground: '#cdffd8',
-        removedGutterBackground: '#ffdce0',
-        gutterBackground: '#f7f7f7',
-        gutterBackgroundDark: '#f3f1f1',
-        highlightBackground: '#fffbdd',
-        highlightGutterBackground: '#fff5b1',
-        codeFoldGutterBackground: '#dbedff',
-        codeFoldBackground: '#f1f8ff',
-        emptyLineBackground: '#fafbfc',
-        gutterColor: '#212529',
-        addedGutterColor: '#212529',
-        removedGutterColor: '#212529',
-        codeFoldContentColor: '#212529',
-        diffViewerTitleBackground: '#fafbfc',
-        diffViewerTitleColor: '#212529',
-        diffViewerTitleBorderColor: '#eee',
+        diffViewerBackground: "#fff",
+        diffViewerColor: "#212529",
+        addedBackground: "#e6ffed",
+        addedColor: "#24292e",
+        removedBackground: "#ffeef0",
+        removedColor: "#24292e",
+        wordAddedBackground: "#acf2bd",
+        wordRemovedBackground: "#fdb8c0",
+        addedGutterBackground: "#cdffd8",
+        removedGutterBackground: "#ffdce0",
+        gutterBackground: "#f7f7f7",
+        gutterBackgroundDark: "#f3f1f1",
+        highlightBackground: "#fffbdd",
+        highlightGutterBackground: "#fff5b1",
+        codeFoldGutterBackground: "#dbedff",
+        codeFoldBackground: "#f1f8ff",
+        emptyLineBackground: "#fafbfc",
+        gutterColor: "#212529",
+        addedGutterColor: "#212529",
+        removedGutterColor: "#212529",
+        codeFoldContentColor: "#212529",
+        diffViewerTitleBackground: "#fafbfc",
+        diffViewerTitleColor: "#212529",
+        diffViewerTitleBorderColor: "#eee",
       },
       ...(overrideVariables.light || {}),
     },
     dark: {
       ...{
-        diffViewerBackground: '#2e303c',
-        diffViewerColor: '#FFF',
-        addedBackground: '#044B53',
-        addedColor: 'white',
-        removedBackground: '#632F34',
-        removedColor: 'white',
-        wordAddedBackground: '#055d67',
-        wordRemovedBackground: '#7d383f',
-        addedGutterBackground: '#034148',
-        removedGutterBackground: '#632b30',
-        gutterBackground: '#2c2f3a',
-        gutterBackgroundDark: '#262933',
-        highlightBackground: '#2a3967',
-        highlightGutterBackground: '#2d4077',
-        codeFoldGutterBackground: '#21232b',
-        codeFoldBackground: '#262831',
-        emptyLineBackground: '#363946',
-        gutterColor: '#464c67',
-        addedGutterColor: '#8c8c8c',
-        removedGutterColor: '#8c8c8c',
-        codeFoldContentColor: '#555a7b',
-        diffViewerTitleBackground: '#2f323e',
-        diffViewerTitleColor: '#555a7b',
-        diffViewerTitleBorderColor: '#353846',
+        diffViewerBackground: "#2e303c",
+        diffViewerColor: "#FFF",
+        addedBackground: "#044B53",
+        addedColor: "white",
+        removedBackground: "#632F34",
+        removedColor: "white",
+        wordAddedBackground: "#055d67",
+        wordRemovedBackground: "#7d383f",
+        addedGutterBackground: "#034148",
+        removedGutterBackground: "#632b30",
+        gutterBackground: "#2c2f3a",
+        gutterBackgroundDark: "#262933",
+        highlightBackground: "#2a3967",
+        highlightGutterBackground: "#2d4077",
+        codeFoldGutterBackground: "#21232b",
+        codeFoldBackground: "#262831",
+        emptyLineBackground: "#363946",
+        gutterColor: "#464c67",
+        addedGutterColor: "#8c8c8c",
+        removedGutterColor: "#8c8c8c",
+        codeFoldContentColor: "#555a7b",
+        diffViewerTitleBackground: "#2f323e",
+        diffViewerTitleColor: "#555a7b",
+        diffViewerTitleBorderColor: "#353846",
       },
       ...(overrideVariables.dark || {}),
     },
@@ -148,45 +148,45 @@ export default (
   const variables = useDarkTheme ? themeVariables.dark : themeVariables.light;
 
   const content = css({
-    width: '100%',
-    label: 'content',
+    width: "100%",
+    label: "content",
   });
 
   const splitView = css({
     [`.${content}`]: {
-      width: '50%',
+      width: "50%",
     },
-    label: 'split-view',
+    label: "split-view",
   });
 
   const diffContainer = css({
-    width: '100%',
+    width: "100%",
     background: variables.diffViewerBackground,
     pre: {
       margin: 0,
-      whiteSpace: 'pre-wrap',
-      lineHeight: '25px',
+      whiteSpace: "pre-wrap",
+      lineHeight: "25px",
     },
-    label: 'diff-container',
-    borderCollapse: 'collapse',
+    label: "diff-container",
+    borderCollapse: "collapse",
   });
 
   const codeFoldContent = css({
     color: variables.codeFoldContentColor,
-    label: 'code-fold-content',
+    label: "code-fold-content",
   });
 
   const contentText = css({
     color: variables.diffViewerColor,
-    label: 'content-text',
+    label: "content-text",
   });
 
   const titleBlock = css({
     background: variables.diffViewerTitleBackground,
     padding: 10,
     borderBottom: `1px solid ${variables.diffViewerTitleBorderColor}`,
-    label: 'title-block',
-    ':last-child': {
+    label: "title-block",
+    ":last-child": {
       borderLeft: `1px solid ${variables.diffViewerTitleBorderColor}`,
     },
     [`.${contentText}`]: {
@@ -196,7 +196,7 @@ export default (
 
   const lineNumber = css({
     color: variables.gutterColor,
-    label: 'line-number',
+    label: "line-number",
   });
 
   const diffRemoved = css({
@@ -208,7 +208,7 @@ export default (
     [`.${lineNumber}`]: {
       color: variables.removedGutterColor,
     },
-    label: 'diff-removed',
+    label: "diff-removed",
   });
 
   const diffAdded = css({
@@ -220,29 +220,29 @@ export default (
     [`.${lineNumber}`]: {
       color: variables.addedGutterColor,
     },
-    label: 'diff-added',
+    label: "diff-added",
   });
 
   const wordDiff = css({
     padding: 2,
-    display: 'inline-flex',
+    display: "inline-flex",
     borderRadius: 1,
-    label: 'word-diff',
+    label: "word-diff",
   });
 
   const wordAdded = css({
     background: variables.wordAddedBackground,
-    label: 'word-added',
+    label: "word-added",
   });
 
   const wordRemoved = css({
     background: variables.wordRemovedBackground,
-    label: 'word-removed',
+    label: "word-removed",
   });
 
   const codeFoldGutter = css({
     backgroundColor: variables.codeFoldGutterBackground,
-    label: 'code-fold-gutter',
+    label: "code-fold-gutter",
   });
 
   const codeFold = css({
@@ -250,27 +250,27 @@ export default (
     height: 40,
     fontSize: 14,
     fontWeight: 700,
-    label: 'code-fold',
+    label: "code-fold",
     a: {
-      textDecoration: 'underline !important',
-      cursor: 'pointer',
+      textDecoration: "underline !important",
+      cursor: "pointer",
       pre: {
-        display: 'inline',
+        display: "inline",
       },
     },
   });
 
   const emptyLine = css({
     backgroundColor: variables.emptyLineBackground,
-    label: 'empty-line',
+    label: "empty-line",
   });
 
   const marker = css({
     width: 25,
     paddingLeft: 10,
     paddingRight: 10,
-    userSelect: 'none',
-    label: 'marker',
+    userSelect: "none",
+    label: "marker",
     [`&.${diffAdded}`]: {
       pre: {
         color: variables.addedColor,
@@ -285,25 +285,25 @@ export default (
 
   const highlightedLine = css({
     background: variables.highlightBackground,
-    label: 'highlighted-line',
+    label: "highlighted-line",
     [`.${wordAdded}, .${wordRemoved}`]: {
-      backgroundColor: 'initial',
+      backgroundColor: "initial",
     },
   });
 
   const highlightedGutter = css({
-    label: 'highlighted-gutter',
+    label: "highlighted-gutter",
   });
 
   const gutter = css({
-    userSelect: 'none',
+    userSelect: "none",
     minWidth: 50,
-    padding: '0 10px',
-    label: 'gutter',
-    textAlign: 'right',
+    padding: "0 10px",
+    label: "gutter",
+    textAlign: "right",
     background: variables.gutterBackground,
-    '&:hover': {
-      cursor: 'pointer',
+    "&:hover": {
+      cursor: "pointer",
       background: variables.gutterBackgroundDark,
       pre: {
         opacity: 1,
@@ -320,25 +320,26 @@ export default (
     },
     [`&.${highlightedGutter}`]: {
       background: variables.highlightGutterBackground,
-      '&:hover': {
+      "&:hover": {
         background: variables.highlightGutterBackground,
       },
     },
   });
 
   const emptyGutter = css({
-    '&:hover': {
+    "&:hover": {
       background: variables.gutterBackground,
-      cursor: 'initial',
+      cursor: "initial",
     },
-    label: 'empty-gutter',
+    label: "empty-gutter",
   });
 
   const line = css({
-    verticalAlign: 'baseline',
-    label: 'line',
+    verticalAlign: "baseline",
+    label: "line",
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const defaultStyles: any = {
     diffContainer,
     diffRemoved,
@@ -369,6 +370,7 @@ export default (
     (acc, key): ReactDiffViewerStyles => ({
       ...acc,
       ...{
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         [key]: css((styles as any)[key]),
       },
     }),

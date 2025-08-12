@@ -1,5 +1,6 @@
-import * as diff from 'diff';
+import * as diff from "diff";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const jsDiff: { [key: string]: any } = diff;
 
 export enum DiffType {
@@ -10,13 +11,13 @@ export enum DiffType {
 
 // See https://github.com/kpdecker/jsdiff/tree/v4.0.1#api for more info on the below JsDiff methods
 export enum DiffMethod {
-  CHARS = 'diffChars',
-  WORDS = 'diffWords',
-  WORDS_WITH_SPACE = 'diffWordsWithSpace',
-  LINES = 'diffLines',
-  TRIMMED_LINES = 'diffTrimmedLines',
-  SENTENCES = 'diffSentences',
-  CSS = 'diffCss',
+  CHARS = "diffChars",
+  WORDS = "diffWords",
+  WORDS_WITH_SPACE = "diffWordsWithSpace",
+  LINES = "diffLines",
+  TRIMMED_LINES = "diffTrimmedLines",
+  SENTENCES = "diffSentences",
+  CSS = "diffCss",
 }
 
 export interface DiffInformation {
@@ -55,7 +56,7 @@ export interface JsDiffChangeObject {
  * @param value Diff text from the js diff module.
  */
 const constructLines = (value: string): string[] => {
-  const lines = value.split('\n');
+  const lines = value.split("\n");
   const isAllEmpty = lines.every((val): boolean => !val);
   if (isAllEmpty) {
     // This is to avoid added an extra new line in the UI.
@@ -144,19 +145,15 @@ const computeLineInformation = (
   compareMethod: string = DiffMethod.CHARS,
   linesOffset: number = 0,
 ): ComputedLineInformation => {
-  const t_a = performance.now();
   const diffArray = diff.diffLines(
     oldString, // .trimRight(),
     newString, // .trimRight(),
     {
       newlineIsToken: true,
       ignoreWhitespace: false,
-      // ignoreCase: false,
     },
   );
 
-  const t_b = performance.now();
-  console.log(`diffLines took ${t_b - t_a} ms`);
   let rightLineNumber = linesOffset;
   let leftLineNumber = linesOffset;
   const lineInformation: LineInformation[] = [];
@@ -170,16 +167,13 @@ const computeLineInformation = (
     removed?: boolean,
     evaluateOnlyFirstLine?: boolean,
   ): LineInformation[] => {
-    // const t0 = performance.now();
     const lines = constructLines(value);
-    // const t1 = performance.now();
-    // console.log('constructLines took ' + (t1 - t0) + ' ms');
     return lines.flatMap((line: string, lineIndex): LineInformation[] => {
       const left: DiffInformation = {};
       const right: DiffInformation = {};
       if (
-        ignoreDiffIndexes.includes(`${diffIndex}-${lineIndex}`)
-        || (evaluateOnlyFirstLine && lineIndex !== 0)
+        ignoreDiffIndexes.includes(`${diffIndex}-${lineIndex}`) ||
+        (evaluateOnlyFirstLine && lineIndex !== 0)
       ) {
         return [];
       }
@@ -191,7 +185,7 @@ const computeLineInformation = (
           leftLineNumber += 1;
           left.lineNumber = leftLineNumber;
           left.type = DiffType.REMOVED;
-          left.value = line || ' ';
+          left.value = line || " ";
           // When the current line is of type REMOVED, check the next item in
           // the diff array whether it is of type ADDED. If true, the current
           // diff will be marked as both REMOVED and ADDED. Meaning, the
@@ -222,16 +216,11 @@ const computeLineInformation = (
               if (disableWordDiff) {
                 right.value = rightValue;
               } else {
-                // const t00 = performance.now();
                 const computedDiff = computeDiff(
                   line,
                   rightValue as string,
                   compareMethod,
                 );
-                // const t11 = performance.now();
-                // console.log(
-                // 	'computeDiff took ' + (t11 - t00) + ' ms',
-                // );
                 right.value = computedDiff.right;
                 left.value = computedDiff.left;
               }
@@ -262,15 +251,10 @@ const computeLineInformation = (
       });
       return [{ right, left }];
     });
-    // .filter(Boolean);
   };
 
   diffArray.forEach(({ added, removed, value }: diff.Change, index): void => {
     getLineInformation(value, index, added, removed);
-    // lineInformation = [
-    // 	...lineInformation,
-    // 	...getLineInformation(value, index, added, removed),
-    // ];
   });
 
   return {

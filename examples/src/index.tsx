@@ -1,15 +1,15 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 
-import { createRoot } from 'react-dom/client';
-import ReactDiff, { DiffMethod } from '../../lib/index';
+import { createRoot } from "react-dom/client";
+import ReactDiff, { DiffMethod } from "../../lib/index";
 
-require('./style.scss');
+require("./style.scss");
 
-const oldJs = require('./diff/javascript/old.rjs').default;
-const newJs = require('./diff/javascript/new.rjs').default;
+const oldJs = require("./diff/javascript/old.rjs").default;
+const newJs = require("./diff/javascript/new.rjs").default;
 
-const logo = require('../../logo.png');
+const logo = require("../../logo.png");
 
 interface ExampleState {
   splitView?: boolean;
@@ -36,8 +36,8 @@ class Example extends React.Component<{}, ExampleState> {
   ): void => {
     let highlightLine = [id];
     if (e.shiftKey && this.state.highlightLine?.length === 1) {
-      const [dir, oldId] = this.state.highlightLine?.[0].split('-');
-      const [newDir, newId] = id.split('-');
+      const [dir, oldId] = this.state.highlightLine?.[0].split("-");
+      const [newDir, newId] = id.split("-");
       if (dir === newDir) {
         highlightLine = [];
         const lowEnd = Math.min(Number(oldId), Number(newId));
@@ -67,13 +67,17 @@ class Example extends React.Component<{}, ExampleState> {
             <img src={logo} alt="React Diff Viewer Logo" />
           </div>
           <p>
-            A simple and beautiful text diff viewer made with{' '}
-            <a href="https://github.com/kpdecker/jsdiff" target="_blank">
-              Diff{' '}
+            A simple and beautiful text diff viewer made with{" "}
+            <a
+              href="https://github.com/kpdecker/jsdiff"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Diff{" "}
             </a>
-            and{' '}
-            <a href="https://reactjs.org" target="_blank">
-              React.{' '}
+            and{" "}
+            <a href="https://reactjs.org" target="_blank" rel="noreferrer">
+              React.{" "}
             </a>
             Featuring split view, inline view, word diff, line highlight and
             more.
@@ -101,8 +105,8 @@ class Example extends React.Component<{}, ExampleState> {
           />
         </div>
         <footer>
-          Made with 💓 by{' '}
-          <a href="https://praneshravi.in" target="_blank">
+          Made with 💓 by{" "}
+          <a href="https://praneshravi.in" target="_blank" rel="noreferrer">
             Pranesh Ravi
           </a>
         </footer>
@@ -111,5 +115,5 @@ class Example extends React.Component<{}, ExampleState> {
   }
 }
 
-const root = createRoot(document.getElementById('app') as HTMLElement);
+const root = createRoot(document.getElementById("app") as HTMLElement);
 root.render(<Example />);
