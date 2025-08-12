@@ -36,9 +36,7 @@ export default defineConfig([{
         "no-tabs": "off",
         "indent": ["off", 2], //TODO turn this back to error or update when doing lints
 
-        "max-len": ["error", {
-            code: 100,
-        }],
+        "max-len": ["off"],
 
         "arrow-body-style": "off",
     },
