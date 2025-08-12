@@ -1,4 +1,7 @@
-function resetCodeBlocks(expandedBlocksSize: number, setExpandedBlocks: (arg: Set<number>) => void): boolean {
+function resetCodeBlocks(
+  expandedBlocksSize: number,
+  setExpandedBlocks: (arg: Set<number>) => void,
+): boolean {
   if (expandedBlocksSize > 0) {
     setExpandedBlocks(new Set<number>());
     return true;
@@ -7,7 +10,11 @@ function resetCodeBlocks(expandedBlocksSize: number, setExpandedBlocks: (arg: Se
   return false;
 }
 
-function expandBlock(blockId: number, expandedBlockIdsSet: Set<number>, setExpandedBlockIdsSet: (arg: Set<number>) => void) {
+function expandBlock(
+  blockId: number,
+  expandedBlockIdsSet: Set<number>,
+  setExpandedBlockIdsSet: (arg: Set<number>) => void,
+) {
   if (!expandedBlockIdsSet.has(blockId)) {
     setExpandedBlockIdsSet(new Set<number>([...expandedBlockIdsSet, blockId]));
   }

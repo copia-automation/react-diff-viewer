@@ -1,10 +1,10 @@
-require('./style.scss');
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { createRoot } from 'react-dom/client';
 import ReactDiff, { DiffMethod } from '../../lib/index';
 
-import { createRoot } from 'react-dom/client';
+require('./style.scss');
 
 const oldJs = require('./diff/javascript/old.rjs').default;
 const newJs = require('./diff/javascript/new.rjs').default;
@@ -59,7 +59,6 @@ class Example extends React.Component<{}, ExampleState> {
   };
 
   public render(): React.ReactElement {
-
     return (
       <div className="react-diff-viewer-example">
         <div className="radial"></div>
@@ -76,7 +75,8 @@ class Example extends React.Component<{}, ExampleState> {
             <a href="https://reactjs.org" target="_blank">
               React.{' '}
             </a>
-            Featuring split view, inline view, word diff, line highlight and more.
+            Featuring split view, inline view, word diff, line highlight and
+            more.
           </p>
           <div className="cta">
             <a href="https://github.com/praneshr/react-diff-viewer#install">
