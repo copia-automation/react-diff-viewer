@@ -1,6 +1,6 @@
 {
   "name": "@copia-automation/react-diff-viewer",
-  "version": "4.0.0-0",
+  "version": "4.0.0-1",
   "private": false,
   "description": "A simple and beautiful text diff viewer component made with diff and React",
   "keywords": [
@@ -15,7 +15,9 @@
   ],
   "files": [
     "lib/*.js",
-    "lib/*.d.ts"
+    "lib/*.d.ts",
+    "lib/**/*.js",
+    "lib/**/*.d.ts"
   ],
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
