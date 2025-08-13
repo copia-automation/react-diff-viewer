@@ -153,10 +153,6 @@ function DiffViewer({
     setExpandedBlockIdsSet(newState);
   }
 
-  React.useEffect(() => {
-    console.log({ expandedBlockIdsSet });
-  }, [expandedBlockIdsSet]);
-
   const props = {
     oldValue,
     newValue,
@@ -204,8 +200,8 @@ function DiffViewer({
     };
 
     worker.postMessage({
-      oldValue, //: oldValue.slice(0, 10000),
-      newValue, //: newValue.slice(0, 10000),
+      oldValue: oldValue.slice(0, 10000),
+      newValue: newValue.slice(0, 10000),
       disableWordDiff,
       compareMethod,
       linesOffset,
@@ -277,16 +273,12 @@ function DiffViewer({
     <TableVirtuoso
       style={{
         width: "100%",
-        height: "100%",
-        minHeight: 400,
+        maxHeight: "100%",
+        height: 1000,
       }}
       data={linesToRender}
       fixedHeaderContent={() => (
-        <Title
-          {...renderProps}
-          // This isn't exactly accurate, but should be good enough
-          largestPossibleLineNumber={largestLineNumber}
-        />
+        <Title {...renderProps} largestPossibleLineNumber={largestLineNumber} />
       )}
       itemContent={(index, line) => (
         <RenderLineFromProps

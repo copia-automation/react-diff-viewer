@@ -91,7 +91,7 @@ class Example extends React.Component<object, ExampleState> {
             </a>
           </div>
         </div>
-        <div className="diff-viewer">
+        <div className="diff-viewer" style={{ height: 800 }}>
           <ReactDiff
             highlightLines={this.state.highlightLine}
             onLineNumberClick={this.onLineNumberClick}
