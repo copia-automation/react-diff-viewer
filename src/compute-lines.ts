@@ -168,7 +168,6 @@ const computeLineInformation = (
     evaluateOnlyFirstLine?: boolean,
     isRetrieveNext?: boolean,
   ): LineInformation[] => {
-    console.log("xyz", added, removed);
     const lines = constructLines(value);
     return lines.flatMap((line: string, lineIndex): LineInformation[] => {
       const left: DiffInformation = {};

@@ -185,8 +185,8 @@ function DiffViewer({
     };
 
     worker.postMessage({
-      oldValue: oldValue.slice(0, 500),
-      newValue: newValue.slice(0, 500),
+      oldValue,
+      newValue,
       disableWordDiff,
       compareMethod,
       linesOffset,
