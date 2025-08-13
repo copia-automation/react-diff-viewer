@@ -4,31 +4,18 @@ import { LineNumberPrefix } from "../getLinesToRender";
 import { Line } from "./Line";
 
 export function InlineView({ left, right }: LineInformation) {
-  let content;
   if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
     return (
-      <React.Fragment>
-        {/* <tr className={renderProps.styles.line}> */}
-        <Line
-          lineNumber={left.lineNumber}
-          type={left.type}
-          prefix={LineNumberPrefix.LEFT}
-          value={left.value}
-        />
-        {/* </tr> */}
-        {/* <tr className={renderProps.styles.line}> */}
-        <Line
-          lineNumber={null}
-          type={right.type}
-          prefix={LineNumberPrefix.RIGHT}
-          value={right.value}
-        />
-        {/* </tr> */}
-      </React.Fragment>
+      <Line
+        lineNumber={left.lineNumber}
+        type={left.type}
+        prefix={LineNumberPrefix.LEFT}
+        value={left.value}
+      />
     );
   }
   if (left.type === DiffType.REMOVED) {
-    content = (
+    return (
       <Line
         lineNumber={left.lineNumber}
         type={left.type}
@@ -39,7 +26,7 @@ export function InlineView({ left, right }: LineInformation) {
     );
   }
   if (left.type === DiffType.DEFAULT) {
-    content = (
+    return (
       <Line
         lineNumber={left.lineNumber}
         type={left.type}
@@ -51,7 +38,7 @@ export function InlineView({ left, right }: LineInformation) {
     );
   }
   if (right.type === DiffType.ADDED) {
-    content = (
+    return (
       <Line
         lineNumber={null}
         type={right.type}
@@ -62,11 +49,5 @@ export function InlineView({ left, right }: LineInformation) {
     );
   }
 
-  return (
-    <>
-      {/* <tr key={index} className={renderProps.styles.line}> */}
-      {content}
-      {/* </tr> */}
-    </>
-  );
+  throw new Error("Unreachable");
 }

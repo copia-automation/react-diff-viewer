@@ -20,6 +20,7 @@ function AlignmentRow({
   return (
     <tr style={{ height: 0 }}>
       {!hideLineNumbers && <td style={{ width: gutterWidth }} />}
+      {!hideLineNumbers && !splitView && <td style={{ width: gutterWidth }} />}
       <td style={{ width: 29 }} />
       <td />
       {splitView && (

@@ -141,7 +141,7 @@ function DiffViewer({
   const props = {
     oldValue,
     newValue,
-    splitView,
+    splitView: false,
     highlightLines,
     disableWordDiff,
     compareMethod,
