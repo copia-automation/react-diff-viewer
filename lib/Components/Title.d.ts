@@ -1,7 +1,4 @@
 import * as React from "react";
-import { ReactDiffViewerRenderProps } from "../getLinesToRender";
-interface TitleProps extends ReactDiffViewerRenderProps {
+export declare function Title({ largestPossibleLineNumber, }: {
     largestPossibleLineNumber: number;
-}
-export declare function Title({ hideLineNumbers, leftTitle, rightTitle, splitView, styles, largestPossibleLineNumber, }: TitleProps): React.JSX.Element;
-export {};
+}): React.JSX.Element;

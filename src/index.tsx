@@ -1,21 +1,21 @@
 import * as React from "react";
 import cn from "classnames";
 
-import { DiffMethod } from "./compute-lines";
+import { DiffMethod, LineInformation } from "./compute-lines";
 import computeStyles, {
   ReactDiffViewerStylesOverride,
 } from "./Components/styles";
-import {
-  LineInformationProps,
-  ReactDiffViewerRenderProps,
-  SkippedLineProps,
-} from "./getLinesToRender";
+import { ReactDiffViewerContext, SkippedLine } from "./getLinesToRender";
 import { Title } from "./Components/Title";
-import { SplitView } from "./Components/RenderSplitView";
+import { SplitView } from "./Components/SplitView";
 import { Node } from "./Components/Node";
 import { InlineView } from "./Components/InlineView";
 import { SkippedLineIndicator } from "./Components/SkippedLineIndicator";
 import { TableVirtuoso } from "react-virtuoso";
+import {
+  ReactDiffViewerContextProvider,
+  useReactDiffViewerContext,
+} from "./context";
 
 export interface ReactDiffViewerProps {
   // Old value to compare.
@@ -75,46 +75,31 @@ function RenderLineFromProps({
   line,
   i,
   expandBlockById,
-  renderProps,
 }: {
-  line: LineInformationProps | SkippedLineProps;
+  line: LineInformation | SkippedLine;
   i: number;
   expandBlockById: (id: number) => void;
-  renderProps: ReactDiffViewerRenderProps;
 }) {
+  const { splitView } = useReactDiffViewerContext();
   if ("num" in line) {
     return (
-      <Node key={i} index={i} renderNodeWrapper={renderProps.renderNodeWrapper}>
-        <SkippedLineIndicator
-          {...line}
-          renderProps={renderProps}
-          expandBlockById={expandBlockById}
-        />
+      <Node key={i} index={i}>
+        <SkippedLineIndicator {...line} expandBlockById={expandBlockById} />
       </Node>
     );
   }
 
-  const { index: lineIndex, ...lineProps } = line;
-
-  if (renderProps.splitView) {
+  if (splitView) {
     return (
-      <Node key={i} index={i} renderNodeWrapper={renderProps.renderNodeWrapper}>
-        <SplitView
-          lineInfo={lineProps}
-          renderProps={renderProps}
-          index={lineIndex}
-        />
+      <Node key={i} index={i}>
+        <SplitView {...line} />
       </Node>
     );
   }
 
   return (
-    <Node key={i} index={i} renderNodeWrapper={renderProps.renderNodeWrapper}>
-      <InlineView
-        lineInfo={lineProps}
-        renderProps={renderProps}
-        index={lineIndex}
-      />
+    <Node key={i} index={i}>
+      <InlineView {...line} />
     </Node>
   );
 }
@@ -142,7 +127,7 @@ function DiffViewer({
   const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState<boolean>(true);
   const [linesToRender, setLinesToRender] = React.useState<
-    Array<LineInformationProps | SkippedLineProps>
+    Array<LineInformation | SkippedLine>
   >([]);
 
   function expandBlockById(blockId: number) {
@@ -176,7 +161,7 @@ function DiffViewer({
     () => computeStyles(props.styles, useDarkTheme),
     [props.styles, useDarkTheme],
   );
-  const renderProps = React.useMemo<ReactDiffViewerRenderProps>(
+  const renderProps = React.useMemo<ReactDiffViewerContext>(
     () => ({
       ...props,
       styles,
@@ -270,48 +255,52 @@ function DiffViewer({
   }
 
   return (
-    <TableVirtuoso
-      style={{
-        width: "100%",
-        maxHeight: "100%",
-        height: 1000,
-      }}
-      data={linesToRender}
-      fixedHeaderContent={() => (
-        <Title {...renderProps} largestPossibleLineNumber={largestLineNumber} />
-      )}
-      itemContent={(index, line) => (
-        <RenderLineFromProps
-          key={index}
-          line={line}
-          i={index}
-          expandBlockById={expandBlockById}
-          renderProps={renderProps}
-        />
-      )}
-      components={{
-        Table: (props: object) => (
-          <table
-            {...props}
-            className={cn(styles.diffContainer, {
-              [styles.splitView]: splitView,
-            })}
-            style={{
-              tableLayout: "fixed",
-            }}
+    <ReactDiffViewerContextProvider value={renderProps}>
+      <TableVirtuoso
+        style={{
+          width: "100%",
+          maxHeight: "100%",
+          height: 1000,
+        }}
+        data={linesToRender}
+        fixedHeaderContent={() => (
+          <Title
+            {...renderProps}
+            largestPossibleLineNumber={largestLineNumber}
           />
-        ),
-        TableRow: (props: object) => {
-          // @ts-expect-error Haven't figured out props typing yet
-          const item = props?.item as LineInformationProps | SkippedLineProps;
-          const classNames = cn({
-            [styles.codeFold]: "num" in item,
-            [styles.line]: !("num" in item),
-          });
-          return <tr className={classNames} {...props} />;
-        },
-      }}
-    />
+        )}
+        itemContent={(index, line) => (
+          <RenderLineFromProps
+            key={index}
+            line={line}
+            i={index}
+            expandBlockById={expandBlockById}
+          />
+        )}
+        components={{
+          Table: (props: object) => (
+            <table
+              {...props}
+              className={cn(styles.diffContainer, {
+                [styles.splitView]: splitView,
+              })}
+              style={{
+                tableLayout: "fixed",
+              }}
+            />
+          ),
+          TableRow: (props: object) => {
+            // @ts-expect-error Haven't figured out props typing yet
+            const item = props?.item as LineInformation | SkippedLine;
+            const classNames = cn({
+              [styles.codeFold]: "num" in item,
+              [styles.line]: !("num" in item),
+            });
+            return <tr className={classNames} {...props} />;
+          },
+        }}
+      />
+    </ReactDiffViewerContextProvider>
   );
 }
 

@@ -1,6 +1,6 @@
 import getLinesToRender from "./getLinesToRender";
 
-console.log("Loaded Worker");
+console.log("Loaded RDV Worker");
 
 self.onmessage = function (e) {
   try {

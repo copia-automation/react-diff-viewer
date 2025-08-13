@@ -1,20 +1,20 @@
 import * as React from "react";
-import { ReactDiffViewerRenderProps } from "../getLinesToRender";
-import { ReactDiffViewerStyles } from "./styles";
+import { useReactDiffViewerContext } from "../context";
 
-interface TitleProps extends ReactDiffViewerRenderProps {
-  largestPossibleLineNumber: number;
-}
-
+/**
+ * We need an alignment row since we're now using the css
+ * property "table-style: fixed". Since the header will always render,
+ * this allows our column widths to remain consistent even on virtual.
+ *
+ * This is in "fixed" mode the first row sets all column widths
+ */
 function AlignmentRow({
-  hideLineNumbers,
   largestPossibleLineNumber,
-  splitView,
 }: {
-  hideLineNumbers: boolean;
   largestPossibleLineNumber: number;
-  splitView: boolean;
 }) {
+  const { hideLineNumbers, splitView } = useReactDiffViewerContext();
+
   const largestLineNumberCharacters = String(largestPossibleLineNumber).length;
   const gutterWidth = largestLineNumberCharacters * 10 + 20;
   return (
@@ -33,19 +33,9 @@ function AlignmentRow({
   );
 }
 
-function TitleText({
-  hideLineNumbers,
-  leftTitle,
-  rightTitle,
-  splitView,
-  styles,
-}: {
-  hideLineNumbers: boolean;
-  leftTitle?: string | React.ReactElement;
-  rightTitle?: string | React.ReactElement;
-  splitView: boolean;
-  styles: ReactDiffViewerStyles;
-}) {
+function TitleText() {
+  const { hideLineNumbers, leftTitle, rightTitle, splitView, styles } =
+    useReactDiffViewerContext();
   if (!leftTitle && !rightTitle) return <></>;
 
   const colSpanOnSplitView = hideLineNumbers ? 2 : 3;
@@ -69,27 +59,14 @@ function TitleText({
 }
 
 export function Title({
-  hideLineNumbers,
-  leftTitle,
-  rightTitle,
-  splitView,
-  styles,
   largestPossibleLineNumber,
-}: TitleProps) {
+}: {
+  largestPossibleLineNumber: number;
+}) {
   return (
     <>
-      <AlignmentRow
-        hideLineNumbers={hideLineNumbers}
-        largestPossibleLineNumber={largestPossibleLineNumber}
-        splitView={splitView}
-      />
-      <TitleText
-        hideLineNumbers={hideLineNumbers}
-        leftTitle={leftTitle}
-        rightTitle={rightTitle}
-        splitView={splitView}
-        styles={styles}
-      />
+      <AlignmentRow largestPossibleLineNumber={largestPossibleLineNumber} />
+      <TitleText />
     </>
   );
 }

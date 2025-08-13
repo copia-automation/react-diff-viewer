@@ -1,11 +1,9 @@
 import { default as cn } from "classnames";
 import * as React from "react";
 import { DiffType, DiffInformation } from "../compute-lines";
-import {
-  LineNumberPrefix,
-  ReactDiffViewerRenderProps,
-} from "../getLinesToRender";
+import { LineNumberPrefix } from "../getLinesToRender";
 import { WordDiff } from "./WordDiff";
+import { useReactDiffViewerContext } from "../context";
 
 export function Line({
   lineNumber,
@@ -14,7 +12,6 @@ export function Line({
   value,
   additionalLineNumber,
   additionalPrefix,
-  renderProps,
 }: {
   lineNumber: number;
   type: DiffType;
@@ -22,77 +19,78 @@ export function Line({
   value: string | DiffInformation[];
   additionalLineNumber?: number;
   additionalPrefix?: LineNumberPrefix;
-  renderProps: ReactDiffViewerRenderProps;
 }) {
+  const {
+    highlightLines,
+    renderContent,
+    styles,
+    onLineNumberClick,
+    splitView,
+    hideLineNumbers,
+  } = useReactDiffViewerContext();
   const lineNumberTemplate = `${prefix}-${lineNumber}`;
   const additionalLineNumberTemplate = `${additionalPrefix}-${additionalLineNumber}`;
   const highlightLine =
-    renderProps.highlightLines.includes(lineNumberTemplate) ||
-    renderProps.highlightLines.includes(additionalLineNumberTemplate);
+    highlightLines.includes(lineNumberTemplate) ||
+    highlightLines.includes(additionalLineNumberTemplate);
   const added = type === DiffType.ADDED;
   const removed = type === DiffType.REMOVED;
   let content;
   if (Array.isArray(value)) {
     content = (
-      <WordDiff
-        diffArray={value}
-        renderer={renderProps.renderContent}
-        styles={renderProps.styles}
-      />
+      <WordDiff diffArray={value} renderer={renderContent} styles={styles} />
     );
-  } else if (renderProps.renderContent) {
-    content = renderProps.renderContent(value);
+  } else if (renderContent) {
+    content = renderContent(value);
   } else {
     content = value;
   }
 
   function onLineNumberClickProxy(id: string) {
-    if (renderProps.onLineNumberClick) {
+    if (onLineNumberClick) {
       return (e: React.MouseEvent<HTMLTableCellElement>): void =>
-        renderProps.onLineNumberClick(id, e);
+        onLineNumberClick(id, e);
     }
     return (): void => {};
   }
 
   return (
     <React.Fragment>
-      {!renderProps.hideLineNumbers && (
+      {!hideLineNumbers && (
         <td
           onClick={lineNumber && onLineNumberClickProxy(lineNumberTemplate)}
-          className={cn(renderProps.styles.gutter, {
-            [renderProps.styles.emptyGutter]: !lineNumber,
-            [renderProps.styles.diffAdded]: added,
-            [renderProps.styles.diffRemoved]: removed,
-            [renderProps.styles.highlightedGutter]: highlightLine,
+          className={cn(styles.gutter, {
+            [styles.emptyGutter]: !lineNumber,
+            [styles.diffAdded]: added,
+            [styles.diffRemoved]: removed,
+            [styles.highlightedGutter]: highlightLine,
           })}
         >
-          <pre className={renderProps.styles.lineNumber}>{lineNumber}</pre>
+          <pre className={styles.lineNumber}>{lineNumber}</pre>
         </td>
       )}
-      {!renderProps.splitView && !renderProps.hideLineNumbers && (
+      {!splitView && !hideLineNumbers && (
         <td
           onClick={
             additionalLineNumber &&
             onLineNumberClickProxy(additionalLineNumberTemplate)
           }
-          className={cn(renderProps.styles.gutter, {
-            [renderProps.styles.emptyGutter]: !additionalLineNumber,
-            [renderProps.styles.diffAdded]: added,
-            [renderProps.styles.diffRemoved]: removed,
-            [renderProps.styles.highlightedGutter]: highlightLine,
+          className={cn(styles.gutter, {
+            [styles.emptyGutter]: !additionalLineNumber,
+            [styles.diffAdded]: added,
+            [styles.diffRemoved]: removed,
+            [styles.highlightedGutter]: highlightLine,
           })}
         >
-          <pre className={renderProps.styles.lineNumber}>
-            {additionalLineNumber}
-          </pre>
+          <pre className={styles.lineNumber}>{additionalLineNumber}</pre>
         </td>
       )}
       <td
-        className={cn(renderProps.styles.marker, {
-          [renderProps.styles.emptyLine]: !content,
-          [renderProps.styles.diffAdded]: added,
-          [renderProps.styles.diffRemoved]: removed,
-          [renderProps.styles.highlightedLine]: highlightLine,
+        className={cn(styles.marker, {
+          [styles.emptyLine]: !content,
+          [styles.diffAdded]: added,
+          [styles.diffRemoved]: removed,
+          [styles.highlightedLine]: highlightLine,
         })}
       >
         <pre>
@@ -101,14 +99,14 @@ export function Line({
         </pre>
       </td>
       <td
-        className={cn(renderProps.styles.content, {
-          [renderProps.styles.emptyLine]: !content,
-          [renderProps.styles.diffAdded]: added,
-          [renderProps.styles.diffRemoved]: removed,
-          [renderProps.styles.highlightedLine]: highlightLine,
+        className={cn(styles.content, {
+          [styles.emptyLine]: !content,
+          [styles.diffAdded]: added,
+          [styles.diffRemoved]: removed,
+          [styles.highlightedLine]: highlightLine,
         })}
       >
-        <pre className={renderProps.styles.contentText}>{content}</pre>
+        <pre className={styles.contentText}>{content}</pre>
       </td>
     </React.Fragment>
   );

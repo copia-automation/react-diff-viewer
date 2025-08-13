@@ -1,6 +1,5 @@
 import * as React from "react";
-export declare function Node({ renderNodeWrapper, index, children, }: {
-    renderNodeWrapper?: (node: React.ReactElement, index: number) => React.ReactElement;
+export declare function Node({ index, children, }: {
     children: React.ReactElement;
     index: number;
 }): React.ReactElement;

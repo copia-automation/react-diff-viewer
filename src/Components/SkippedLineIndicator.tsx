@@ -1,29 +1,27 @@
 import { default as cn } from "classnames";
 import * as React from "react";
-import { ReactDiffViewerRenderProps } from "../getLinesToRender";
+import { useReactDiffViewerContext } from "../context";
 
 export function SkippedLineIndicator({
   num,
   blockNumber,
   leftBlockLineNumber,
   rightBlockLineNumber,
-  renderProps,
   expandBlockById,
 }: {
   num: number;
   blockNumber: number;
   leftBlockLineNumber: number;
   rightBlockLineNumber: number;
-  renderProps: ReactDiffViewerRenderProps;
   expandBlockById: (id: number) => void;
 }) {
-  const { codeFoldMessageRenderer, hideLineNumbers, splitView } = renderProps;
+  const { codeFoldMessageRenderer, hideLineNumbers, splitView, styles } =
+    useReactDiffViewerContext();
+
   const message = codeFoldMessageRenderer ? (
     codeFoldMessageRenderer(num, leftBlockLineNumber, rightBlockLineNumber)
   ) : (
-    <pre className={renderProps.styles.codeFoldContent}>
-      Expand {num} lines ...
-    </pre>
+    <pre className={styles.codeFoldContent}>Expand {num} lines ...</pre>
   );
   const content = (
     <td>
@@ -40,10 +38,10 @@ export function SkippedLineIndicator({
   const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
   return (
     <>
-      {!hideLineNumbers && <td className={renderProps.styles.codeFoldGutter} />}
+      {!hideLineNumbers && <td className={styles.codeFoldGutter} />}
       <td
         className={cn({
-          [renderProps.styles.codeFoldGutter]: isUnifiedViewWithoutLineNumbers,
+          [styles.codeFoldGutter]: isUnifiedViewWithoutLineNumbers,
         })}
       />
 

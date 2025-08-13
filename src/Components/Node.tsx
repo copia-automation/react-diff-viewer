@@ -1,17 +1,15 @@
 import * as React from "react";
+import { useReactDiffViewerContext } from "../context";
 
 export function Node({
-  renderNodeWrapper,
   index,
   children,
 }: {
-  renderNodeWrapper?: (
-    node: React.ReactElement,
-    index: number,
-  ) => React.ReactElement;
   children: React.ReactElement;
   index: number;
 }): React.ReactElement {
+  const { renderNodeWrapper } = useReactDiffViewerContext();
+
   if (renderNodeWrapper) {
     return <>{renderNodeWrapper(children, index)}</>;
   }

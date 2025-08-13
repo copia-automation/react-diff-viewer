@@ -12,21 +12,14 @@ export enum LineNumberPrefix {
   RIGHT = "R",
 }
 
-export type SkippedLineProps = {
+export type SkippedLine = {
   num: number;
   blockNumber: number;
   leftBlockLineNumber: number;
   rightBlockLineNumber: number;
 };
 
-export interface RenderSkippedLineProps extends SkippedLineProps {
-  styles: ReactDiffViewerStyles;
-}
-export interface LineInformationProps extends LineInformation {
-  index: number;
-}
-
-export interface ReactDiffViewerRenderProps extends ReactDiffViewerProps {
+export interface ReactDiffViewerContext extends ReactDiffViewerProps {
   styles: ReactDiffViewerStyles;
 }
 
@@ -48,7 +41,7 @@ function getLinesToRender({
   extraLinesSurroundingDiff: number;
   showDiffOnly: boolean;
   expandedBlockIdsSet: Set<number>;
-}): Array<SkippedLineProps | LineInformationProps> {
+}): Array<SkippedLine | LineInformation> {
   const { lineInformation, diffLines } = computeLineInformation(
     oldValue,
     newValue,
@@ -60,7 +53,7 @@ function getLinesToRender({
     extraLinesSurroundingDiff < 0 ? 0 : extraLinesSurroundingDiff;
   let skippedLines: number[] = [];
   let diffLinesIndex = 0;
-  const lines: Array<SkippedLineProps | LineInformationProps> = [];
+  const lines: Array<SkippedLine | LineInformation> = [];
 
   lineInformation.forEach(
     (line: LineInformation, i: number): React.ReactElement => {
@@ -102,10 +95,7 @@ function getLinesToRender({
         });
         return;
       }
-      lines.push({
-        ...line,
-        index: i,
-      });
+      lines.push(line);
     },
   );
 

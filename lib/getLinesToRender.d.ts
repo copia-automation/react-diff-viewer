@@ -5,19 +5,13 @@ export declare enum LineNumberPrefix {
     LEFT = "L",
     RIGHT = "R"
 }
-export type SkippedLineProps = {
+export type SkippedLine = {
     num: number;
     blockNumber: number;
     leftBlockLineNumber: number;
     rightBlockLineNumber: number;
 };
-export interface RenderSkippedLineProps extends SkippedLineProps {
-    styles: ReactDiffViewerStyles;
-}
-export interface LineInformationProps extends LineInformation {
-    index: number;
-}
-export interface ReactDiffViewerRenderProps extends ReactDiffViewerProps {
+export interface ReactDiffViewerContext extends ReactDiffViewerProps {
     styles: ReactDiffViewerStyles;
 }
 declare function getLinesToRender({ oldValue, newValue, disableWordDiff, compareMethod, linesOffset, extraLinesSurroundingDiff, showDiffOnly, expandedBlockIdsSet, }: {
@@ -29,5 +23,5 @@ declare function getLinesToRender({ oldValue, newValue, disableWordDiff, compare
     extraLinesSurroundingDiff: number;
     showDiffOnly: boolean;
     expandedBlockIdsSet: Set<number>;
-}): Array<SkippedLineProps | LineInformationProps>;
+}): Array<SkippedLine | LineInformation>;
 export default getLinesToRender;

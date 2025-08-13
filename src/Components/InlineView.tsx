@@ -1,31 +1,19 @@
 import * as React from "react";
 import { LineInformation, DiffType } from "../compute-lines";
-import {
-  ReactDiffViewerRenderProps,
-  LineNumberPrefix,
-} from "../getLinesToRender";
+import { LineNumberPrefix } from "../getLinesToRender";
 import { Line } from "./Line";
 
-export function InlineView({
-  lineInfo: { left, right },
-  renderProps,
-  index,
-}: {
-  lineInfo: LineInformation;
-  renderProps: ReactDiffViewerRenderProps;
-  index: number;
-}) {
+export function InlineView({ left, right }: LineInformation) {
   let content;
   if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
     return (
-      <React.Fragment key={index}>
+      <React.Fragment>
         {/* <tr className={renderProps.styles.line}> */}
         <Line
           lineNumber={left.lineNumber}
           type={left.type}
           prefix={LineNumberPrefix.LEFT}
           value={left.value}
-          renderProps={renderProps}
         />
         {/* </tr> */}
         {/* <tr className={renderProps.styles.line}> */}
@@ -34,7 +22,6 @@ export function InlineView({
           type={right.type}
           prefix={LineNumberPrefix.RIGHT}
           value={right.value}
-          renderProps={renderProps}
         />
         {/* </tr> */}
       </React.Fragment>
@@ -47,7 +34,6 @@ export function InlineView({
         type={left.type}
         prefix={LineNumberPrefix.LEFT}
         value={left.value}
-        renderProps={renderProps}
         additionalLineNumber={null}
       />
     );
@@ -59,7 +45,6 @@ export function InlineView({
         type={left.type}
         prefix={LineNumberPrefix.LEFT}
         value={left.value}
-        renderProps={renderProps}
         additionalLineNumber={right.lineNumber}
         additionalPrefix={LineNumberPrefix.RIGHT}
       />
@@ -72,7 +57,6 @@ export function InlineView({
         type={right.type}
         prefix={LineNumberPrefix.RIGHT}
         value={right.value}
-        renderProps={renderProps}
         additionalLineNumber={right.lineNumber}
       />
     );
