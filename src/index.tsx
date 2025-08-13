@@ -1,25 +1,18 @@
 import * as React from "react";
 import cn from "classnames";
 
-import helpers from "./helpers";
-
-import {
-  LineInformation,
-  DiffInformation,
-  DiffType,
-  DiffMethod,
-} from "./compute-lines";
-import computeStyles, {
-  ReactDiffViewerStylesOverride,
-  ReactDiffViewerStyles,
-} from "./styles";
+import { DiffMethod } from "./compute-lines";
+import computeStyles, { ReactDiffViewerStylesOverride } from "./styles";
 import getLinesToRender, {
   LineInformationProps,
   ReactDiffViewerRenderProps,
-  LineNumberPrefix,
+  SkippedLineProps,
 } from "./getLinesToRender";
-
-const { expandBlock } = helpers;
+import { Title } from "./Components/Title";
+import { SplitView } from "./Components/RenderSplitView";
+import { Node } from "./Components/Node";
+import { InlineView } from "./Components/InlineView";
+import { SkippedLineIndicator } from "./Components/SkippedLineIndicator";
 
 export interface ReactDiffViewerProps {
   // Old value to compare.
@@ -69,363 +62,57 @@ export interface ReactDiffViewerProps {
   ) => React.ReactElement;
 }
 
-function WordDiff({
-  diffArray,
-  renderer,
-  styles,
-}: {
-  diffArray: DiffInformation[];
-  renderer?: (chunk: string) => React.ReactElement;
-  styles: ReactDiffViewerStyles;
-}) {
-  return diffArray.map((wordDiff, i): React.ReactElement => {
-    return (
-      <span
-        key={i}
-        className={cn(styles.wordDiff, {
-          [styles.wordAdded]: wordDiff.type === DiffType.ADDED,
-          [styles.wordRemoved]: wordDiff.type === DiffType.REMOVED,
-        })}
-      >
-        {renderer
-          ? renderer(wordDiff.value as string)
-          : (wordDiff.value as string)}
-      </span>
-    );
-  });
-}
-
-function RenderLine({
-  lineNumber,
-  type,
-  prefix,
-  value,
-  additionalLineNumber,
-  additionalPrefix,
-  renderProps,
-}: {
-  lineNumber: number;
-  type: DiffType;
-  prefix: LineNumberPrefix;
-  value: string | DiffInformation[];
-  additionalLineNumber?: number;
-  additionalPrefix?: LineNumberPrefix;
-  renderProps: ReactDiffViewerRenderProps;
-}) {
-  const lineNumberTemplate = `${prefix}-${lineNumber}`;
-  const additionalLineNumberTemplate = `${additionalPrefix}-${additionalLineNumber}`;
-  const highlightLine =
-    renderProps.highlightLines.includes(lineNumberTemplate) ||
-    renderProps.highlightLines.includes(additionalLineNumberTemplate);
-  const added = type === DiffType.ADDED;
-  const removed = type === DiffType.REMOVED;
-  let content;
-  if (Array.isArray(value)) {
-    content = (
-      <WordDiff
-        diffArray={value}
-        renderer={renderProps.renderContent}
-        styles={renderProps.styles}
-      />
-    );
-  } else if (renderProps.renderContent) {
-    content = renderProps.renderContent(value);
-  } else {
-    content = value;
-  }
-
-  function onLineNumberClickProxy(id: string) {
-    if (renderProps.onLineNumberClick) {
-      return (e: React.MouseEvent<HTMLTableCellElement>): void =>
-        renderProps.onLineNumberClick(id, e);
-    }
-    return (): void => {};
-  }
-
-  return (
-    <React.Fragment>
-      {!renderProps.hideLineNumbers && (
-        <td
-          onClick={lineNumber && onLineNumberClickProxy(lineNumberTemplate)}
-          className={cn(renderProps.styles.gutter, {
-            [renderProps.styles.emptyGutter]: !lineNumber,
-            [renderProps.styles.diffAdded]: added,
-            [renderProps.styles.diffRemoved]: removed,
-            [renderProps.styles.highlightedGutter]: highlightLine,
-          })}
-        >
-          <pre className={renderProps.styles.lineNumber}>{lineNumber}</pre>
-        </td>
-      )}
-      {!renderProps.splitView && !renderProps.hideLineNumbers && (
-        <td
-          onClick={
-            additionalLineNumber &&
-            onLineNumberClickProxy(additionalLineNumberTemplate)
-          }
-          className={cn(renderProps.styles.gutter, {
-            [renderProps.styles.emptyGutter]: !additionalLineNumber,
-            [renderProps.styles.diffAdded]: added,
-            [renderProps.styles.diffRemoved]: removed,
-            [renderProps.styles.highlightedGutter]: highlightLine,
-          })}
-        >
-          <pre className={renderProps.styles.lineNumber}>
-            {additionalLineNumber}
-          </pre>
-        </td>
-      )}
-      <td
-        className={cn(renderProps.styles.marker, {
-          [renderProps.styles.emptyLine]: !content,
-          [renderProps.styles.diffAdded]: added,
-          [renderProps.styles.diffRemoved]: removed,
-          [renderProps.styles.highlightedLine]: highlightLine,
-        })}
-      >
-        <pre>
-          {added && "+"}
-          {removed && "-"}
-        </pre>
-      </td>
-      <td
-        className={cn(renderProps.styles.content, {
-          [renderProps.styles.emptyLine]: !content,
-          [renderProps.styles.diffAdded]: added,
-          [renderProps.styles.diffRemoved]: removed,
-          [renderProps.styles.highlightedLine]: highlightLine,
-        })}
-      >
-        <pre className={renderProps.styles.contentText}>{content}</pre>
-      </td>
-    </React.Fragment>
-  );
-}
-
-function RenderSplitView({
-  lineInfo: { left, right },
-  renderProps,
-  index,
-}: {
-  lineInfo: LineInformation;
-  renderProps: ReactDiffViewerRenderProps;
-  index: number;
-}) {
-  return (
-    <tr key={index} className={renderProps.styles.line}>
-      <RenderLine
-        lineNumber={left.lineNumber}
-        type={left.type}
-        prefix={LineNumberPrefix.LEFT}
-        value={left.value}
-        renderProps={renderProps}
-      />
-      <RenderLine
-        lineNumber={right.lineNumber}
-        type={right.type}
-        prefix={LineNumberPrefix.RIGHT}
-        value={right.value}
-        renderProps={renderProps}
-      />
-    </tr>
-  );
-}
-
-function RenderNode({
-  renderNodeWrapper,
-  index,
-  children,
-}: {
-  renderNodeWrapper?: (
-    node: React.ReactElement,
-    index: number,
-  ) => React.ReactElement;
-  children: React.ReactElement;
-  index: number;
-}): React.ReactElement {
-  if (renderNodeWrapper) {
-    return <>{renderNodeWrapper(children, index)}</>;
-  }
-  return <>{children}</>;
-}
-
-function RenderInlineView({
-  lineInfo: { left, right },
-  renderProps,
-  index,
-}: {
-  lineInfo: LineInformation;
-  renderProps: ReactDiffViewerRenderProps;
-  index: number;
-}) {
-  let content;
-  if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
-    return (
-      <React.Fragment key={index}>
-        <tr className={renderProps.styles.line}>
-          <RenderLine
-            lineNumber={left.lineNumber}
-            type={left.type}
-            prefix={LineNumberPrefix.LEFT}
-            value={left.value}
-            renderProps={renderProps}
-          />
-        </tr>
-        <tr className={renderProps.styles.line}>
-          <RenderLine
-            lineNumber={null}
-            type={right.type}
-            prefix={LineNumberPrefix.RIGHT}
-            value={right.value}
-            renderProps={renderProps}
-          />
-        </tr>
-      </React.Fragment>
-    );
-  }
-  if (left.type === DiffType.REMOVED) {
-    content = (
-      <RenderLine
-        lineNumber={left.lineNumber}
-        type={left.type}
-        prefix={LineNumberPrefix.LEFT}
-        value={left.value}
-        renderProps={renderProps}
-        additionalLineNumber={null}
-      />
-    );
-  }
-  if (left.type === DiffType.DEFAULT) {
-    content = (
-      <RenderLine
-        lineNumber={left.lineNumber}
-        type={left.type}
-        prefix={LineNumberPrefix.LEFT}
-        value={left.value}
-        renderProps={renderProps}
-        additionalLineNumber={right.lineNumber}
-        additionalPrefix={LineNumberPrefix.RIGHT}
-      />
-    );
-  }
-  if (right.type === DiffType.ADDED) {
-    content = (
-      <RenderLine
-        lineNumber={null}
-        type={right.type}
-        prefix={LineNumberPrefix.RIGHT}
-        value={right.value}
-        renderProps={renderProps}
-        additionalLineNumber={right.lineNumber}
-      />
-    );
-  }
-
-  return (
-    <tr key={index} className={renderProps.styles.line}>
-      {content}
-    </tr>
-  );
-}
-
-function RenderSkippedLineIndicator({
-  num,
-  blockNumber,
-  leftBlockLineNumber,
-  rightBlockLineNumber,
-  renderProps,
-  expandBlockIdsSet,
+function RenderLineFromProps({
+  line,
+  i,
+  expandedBlockIdsSet,
   setExpandedBlockIdsSet,
+  renderProps,
 }: {
-  num: number;
-  blockNumber: number;
-  leftBlockLineNumber: number;
-  rightBlockLineNumber: number;
+  line: LineInformationProps | SkippedLineProps;
+  i: number;
+  expandedBlockIdsSet: Set<number>;
+  setExpandedBlockIdsSet: (arg: Set<number>) => void;
   renderProps: ReactDiffViewerRenderProps;
-  expandBlockIdsSet: Set<number>;
-  setExpandedBlockIdsSet: (newState: Set<number>) => void;
 }) {
-  const { codeFoldMessageRenderer, hideLineNumbers, splitView } = renderProps;
-  const message = codeFoldMessageRenderer ? (
-    codeFoldMessageRenderer(num, leftBlockLineNumber, rightBlockLineNumber)
-  ) : (
-    <pre className={renderProps.styles.codeFoldContent}>
-      Expand {num} lines ...
-    </pre>
-  );
-  const content = (
-    <td>
-      <a
-        onClick={() => {
-          expandBlock(blockNumber, expandBlockIdsSet, (newState: Set<number>) =>
-            setExpandedBlockIdsSet(newState),
-          );
-        }}
-        tabIndex={0}
-      >
-        {message}
-      </a>
-    </td>
-  );
-  const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
+  if (typeof line === "object" && "num" in line) {
+    return (
+      <Node key={i} index={i} renderNodeWrapper={renderProps.renderNodeWrapper}>
+        <SkippedLineIndicator
+          {...line}
+          renderProps={renderProps}
+          expandBlockIdsSet={expandedBlockIdsSet}
+          setExpandedBlockIdsSet={setExpandedBlockIdsSet}
+        />
+      </Node>
+    );
+  }
+
+  const { index: lineIndex, ...lineProps } = line;
+
+  if (renderProps.splitView) {
+    return (
+      <Node key={i} index={i} renderNodeWrapper={renderProps.renderNodeWrapper}>
+        <SplitView
+          lineInfo={lineProps}
+          renderProps={renderProps}
+          index={lineIndex}
+        />
+      </Node>
+    );
+  }
+
   return (
-    <tr
-      key={`${leftBlockLineNumber}-${rightBlockLineNumber}`}
-      className={renderProps.styles.codeFold}
-    >
-      {!hideLineNumbers && <td className={renderProps.styles.codeFoldGutter} />}
-      <td
-        className={cn({
-          [renderProps.styles.codeFoldGutter]: isUnifiedViewWithoutLineNumbers,
-        })}
+    <Node key={i} index={i} renderNodeWrapper={renderProps.renderNodeWrapper}>
+      <InlineView
+        lineInfo={lineProps}
+        renderProps={renderProps}
+        index={lineIndex}
       />
-
-      {/* Swap columns only for unified view without line numbers */}
-      {isUnifiedViewWithoutLineNumbers ? (
-        <React.Fragment>
-          <td />
-          {content}
-        </React.Fragment>
-      ) : (
-        <React.Fragment>
-          {content}
-          <td />
-        </React.Fragment>
-      )}
-
-      <td />
-      <td />
-    </tr>
+    </Node>
   );
 }
 
-function Title({
-  hideLineNumbers,
-  leftTitle,
-  rightTitle,
-  splitView,
-  styles,
-}: ReactDiffViewerRenderProps) {
-  if (!leftTitle && !rightTitle) return <></>;
-
-  const colSpanOnSplitView = hideLineNumbers ? 2 : 3;
-  const colSpanOnInlineView = hideLineNumbers ? 2 : 4;
-  return (
-    <tr>
-      <td
-        colSpan={splitView ? colSpanOnSplitView : colSpanOnInlineView}
-        className={styles.titleBlock}
-      >
-        <pre className={styles.contentText}>{leftTitle}</pre>
-      </td>
-      {splitView && (
-        <td colSpan={colSpanOnSplitView} className={styles.titleBlock}>
-          <pre className={styles.contentText}>{rightTitle}</pre>
-        </td>
-      )}
-    </tr>
-  );
-}
 function DiffViewer({
   oldValue = "",
   newValue = "",
@@ -488,45 +175,16 @@ function DiffViewer({
     >
       <tbody>
         <Title {...renderProps} />
-        {linesToRender.slice(0, 100).map((line, i) => {
-          let node: React.ReactElement;
-          if (typeof line === "object" && "num" in line) {
-            node = (
-              <RenderSkippedLineIndicator
-                {...line}
-                renderProps={renderProps}
-                expandBlockIdsSet={expandedBlockIdsSet}
-                setExpandedBlockIdsSet={setExpandedBlockIdsSet}
-              />
-            );
-          } else {
-            const { index: lineIndex, ...lineProps } =
-              line as LineInformationProps;
-            // const lineInfo = line as LineInformationProps;
-            node = splitView ? (
-              <RenderSplitView
-                lineInfo={lineProps}
-                renderProps={renderProps}
-                index={lineIndex}
-              />
-            ) : (
-              <RenderInlineView
-                lineInfo={lineProps}
-                renderProps={renderProps}
-                index={lineIndex}
-              />
-            );
-          }
-          return (
-            <RenderNode
-              key={i}
-              index={i}
-              renderNodeWrapper={props.renderNodeWrapper}
-            >
-              {node}
-            </RenderNode>
-          );
-        })}
+        {linesToRender.slice(0, 100).map((line, i) => (
+          <RenderLineFromProps
+            key={i}
+            line={line}
+            i={i}
+            expandedBlockIdsSet={expandedBlockIdsSet}
+            setExpandedBlockIdsSet={setExpandedBlockIdsSet}
+            renderProps={renderProps}
+          />
+        ))}
       </tbody>
     </table>
   );

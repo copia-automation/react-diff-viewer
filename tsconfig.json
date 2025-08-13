@@ -12,6 +12,15 @@
     "types": ["mocha", "node"],
     "skipLibCheck": true
   },
-  "include": ["./src/*"],
+  "include": [
+    "./src/*",
+    "src/Components/Title.tsx",
+    "src/Components/InlineView.tsx",
+    "src/Components/Line.tsx",
+    "src/Components/Node.tsx",
+    "src/Components/SkippedLineIndicator.tsx",
+    "src/Components/RenderSplitView.tsx",
+    "src/Components/WordDiff.tsx"
+  ],
   "exclude": ["node_modules"]
 }

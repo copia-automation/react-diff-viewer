@@ -10,7 +10,7 @@ function resetCodeBlocks(
   return false;
 }
 
-function expandBlock(
+export function expandBlock(
   blockId: number,
   expandedBlockIdsSet: Set<number>,
   setExpandedBlockIdsSet: (arg: Set<number>) => void,

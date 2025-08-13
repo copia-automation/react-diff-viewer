@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { computeLineInformation, DiffMethod } from "../src/compute-lines.ts";
+import { computeLineInformation, DiffMethod } from "../src/compute-lines";
 
 describe("Testing compute lines utils", () => {
   it("Should it avoid trailing spaces", () => {
