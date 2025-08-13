@@ -20,7 +20,8 @@ const compat = new FlatCompat({
 export default defineConfig([globalIgnores([
     'webpack.config.js',
     'lib',
-    'examples',
+    'examples/src/diff',
+    'examples/dist',
     'src/getLinesToRender.worker.ts'
 ]), {
     extends: compat.extends('plugin:@typescript-eslint/recommended', 'plugin:react/recommended'),

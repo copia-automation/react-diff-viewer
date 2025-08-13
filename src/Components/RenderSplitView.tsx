@@ -9,7 +9,7 @@ import { Line } from "./Line";
 export function SplitView({
   lineInfo: { left, right },
   renderProps,
-  index,
+  // index,
 }: {
   lineInfo: LineInformation;
   renderProps: ReactDiffViewerRenderProps;

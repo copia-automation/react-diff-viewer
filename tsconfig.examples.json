@@ -2,12 +2,12 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "jsx": "react",
-    "module": "es6",
+    "module": "ES2020",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "target": "es5",
     "downlevelIteration": true,
-    "lib": ["es2019", "dom"]
+    "lib": ["es2020", "dom"]
   },
   "exclude": ["node_modules"]
 }

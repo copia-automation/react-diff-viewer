@@ -1,14 +1,14 @@
+import "./style.scss";
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import * as ReactDOM from "react-dom/client";
 
-import { createRoot } from "react-dom/client";
 import ReactDiff, { DiffMethod } from "../../lib/index";
 
-require("./style.scss");
-
+// eslint-disable-next-line
 const oldJs = require("./diff/javascript/old.rjs").default;
+// eslint-disable-next-line
 const newJs = require("./diff/javascript/new.rjs").default;
-
+// eslint-disable-next-line
 const logo = require("../../logo.png");
 
 interface ExampleState {
@@ -19,10 +19,11 @@ interface ExampleState {
   compareMethod?: DiffMethod;
 }
 
+// eslint-disable-next-line
 const P = (window as any).Prism;
 
-class Example extends React.Component<{}, ExampleState> {
-  public constructor(props: any) {
+class Example extends React.Component<object, ExampleState> {
+  public constructor(props: object) {
     super(props);
     this.state = {
       highlightLine: [],
@@ -36,7 +37,7 @@ class Example extends React.Component<{}, ExampleState> {
   ): void => {
     let highlightLine = [id];
     if (e.shiftKey && this.state.highlightLine?.length === 1) {
-      const [dir, oldId] = this.state.highlightLine?.[0].split("-");
+      const [dir, oldId] = this.state.highlightLine[0].split("-");
       const [newDir, newId] = id.split("-");
       if (dir === newDir) {
         highlightLine = [];
@@ -52,13 +53,13 @@ class Example extends React.Component<{}, ExampleState> {
     });
   };
 
-  private syntaxHighlight = (str: string): any => {
-    if (!str) return;
+  private syntaxHighlight = (str: string): React.ReactElement => {
+    if (!str) return <></>;
     const language = P.highlight(str, P.languages.javascript);
     return <span dangerouslySetInnerHTML={{ __html: language }} />;
   };
 
-  public render(): React.ReactElement {
+  public render(): JSX.Element {
     return (
       <div className="react-diff-viewer-example">
         <div className="radial"></div>
@@ -93,13 +94,12 @@ class Example extends React.Component<{}, ExampleState> {
         <div className="diff-viewer">
           <ReactDiff
             highlightLines={this.state.highlightLine}
-            compareMethod={DiffMethod.WORDS_WITH_SPACE}
             onLineNumberClick={this.onLineNumberClick}
             oldValue={oldJs}
             splitView
             newValue={newJs}
             renderContent={this.syntaxHighlight}
-            // useDarkTheme
+            useDarkTheme
             leftTitle="webpack.config.js master@2178133 - pushed 2 hours ago."
             rightTitle="webpack.config.js master@64207ee - pushed 13 hours ago."
           />
@@ -115,5 +115,10 @@ class Example extends React.Component<{}, ExampleState> {
   }
 }
 
-const root = createRoot(document.getElementById("app") as HTMLElement);
-root.render(<Example />);
+const container = document.getElementById("app");
+if (container) {
+  const root = ReactDOM.createRoot(container);
+  root.render(<Example />);
+} else {
+  throw new Error('Root container "app" not found');
+}
