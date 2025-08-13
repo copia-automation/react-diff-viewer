@@ -166,7 +166,9 @@ const computeLineInformation = (
     added?: boolean,
     removed?: boolean,
     evaluateOnlyFirstLine?: boolean,
+    isRetrieveNext?: boolean,
   ): LineInformation[] => {
+    console.log("xyz", added, removed);
     const lines = constructLines(value);
     return lines.flatMap((line: string, lineIndex): LineInformation[] => {
       const left: DiffInformation = {};
@@ -203,6 +205,7 @@ const computeLineInformation = (
                 diffIndex,
                 true,
                 false,
+                true,
                 true,
               )[0].right;
               // When identified as modification, push the next diff to ignore
@@ -245,10 +248,13 @@ const computeLineInformation = (
       }
 
       counter += 1;
-      lineInformation.push({
-        left,
-        right,
-      });
+
+      if (!isRetrieveNext) {
+        lineInformation.push({
+          left,
+          right,
+        });
+      }
       return [{ right, left }];
     });
   };

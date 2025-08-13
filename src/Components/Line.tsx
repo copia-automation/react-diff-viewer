@@ -37,9 +37,7 @@ export function Line({
   const removed = type === DiffType.REMOVED;
   let content;
   if (Array.isArray(value)) {
-    content = (
-      <WordDiff diffArray={value} renderer={renderContent} styles={styles} />
-    );
+    content = <WordDiff diffArray={value} />;
   } else if (renderContent) {
     content = renderContent(value);
   } else {
