@@ -99,7 +99,7 @@ class Example extends React.Component<object, ExampleState> {
             splitView
             newValue={newJs}
             renderContent={this.syntaxHighlight}
-            useDarkTheme
+            useDarkTheme={false}
             leftTitle="webpack.config.js master@2178133 - pushed 2 hours ago."
             rightTitle="webpack.config.js master@64207ee - pushed 13 hours ago."
           />

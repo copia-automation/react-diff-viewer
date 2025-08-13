@@ -74,24 +74,21 @@ export interface ReactDiffViewerProps {
 function RenderLineFromProps({
   line,
   i,
-  expandedBlockIdsSet,
-  setExpandedBlockIdsSet,
+  expandBlockById,
   renderProps,
 }: {
   line: LineInformationProps | SkippedLineProps;
   i: number;
-  expandedBlockIdsSet: Set<number>;
-  setExpandedBlockIdsSet: (arg: Set<number>) => void;
+  expandBlockById: (id: number) => void;
   renderProps: ReactDiffViewerRenderProps;
 }) {
-  if (typeof line === "object" && "num" in line) {
+  if ("num" in line) {
     return (
       <Node key={i} index={i} renderNodeWrapper={renderProps.renderNodeWrapper}>
         <SkippedLineIndicator
           {...line}
           renderProps={renderProps}
-          expandBlockIdsSet={expandedBlockIdsSet}
-          setExpandedBlockIdsSet={setExpandedBlockIdsSet}
+          expandBlockById={expandBlockById}
         />
       </Node>
     );
@@ -148,6 +145,18 @@ function DiffViewer({
     Array<LineInformationProps | SkippedLineProps>
   >([]);
 
+  function expandBlockById(blockId: number) {
+    const newState = new Set<number>([
+      ...Array.from(expandedBlockIdsSet),
+      blockId,
+    ]);
+    setExpandedBlockIdsSet(newState);
+  }
+
+  React.useEffect(() => {
+    console.log({ expandedBlockIdsSet });
+  }, [expandedBlockIdsSet]);
+
   const props = {
     oldValue,
     newValue,
@@ -180,6 +189,9 @@ function DiffViewer({
   );
 
   React.useEffect(() => {
+    setLoading(true);
+    setErrorMessage(null);
+
     const worker = new Worker(
       new URL("./getLinesToRender.worker.js", import.meta.url),
     );
@@ -208,7 +220,16 @@ function DiffViewer({
     return () => {
       worker.terminate();
     };
-  }, []);
+  }, [
+    oldValue,
+    newValue,
+    disableWordDiff,
+    compareMethod,
+    linesOffset,
+    extraLinesSurroundingDiff,
+    showDiffOnly,
+    expandedBlockIdsSet,
+  ]);
 
   if (errorMessage) {
     if (ErrorDisplay) {
@@ -262,8 +283,7 @@ function DiffViewer({
           key={index}
           line={line}
           i={index}
-          expandedBlockIdsSet={expandedBlockIdsSet}
-          setExpandedBlockIdsSet={setExpandedBlockIdsSet}
+          expandBlockById={expandBlockById}
           renderProps={renderProps}
         />
       )}
@@ -274,8 +294,21 @@ function DiffViewer({
             className={cn(styles.diffContainer, {
               [styles.splitView]: splitView,
             })}
+            style={
+              {
+                // tableLayout: "fixed",
+              }
+            }
           />
         ),
+        TableRow: (props: object) => {
+          // @ts-expect-error Haven't figured out props typing yet
+          const item = props?.item as LineInformationProps | SkippedLineProps;
+          const classNames = cn({
+            [styles.codeFold]: "num" in item,
+          });
+          return <tr className={classNames} {...props} />;
+        },
       }}
     />
   );
@@ -293,8 +326,7 @@ function DiffViewer({
             key={i}
             line={line}
             i={i}
-            expandedBlockIdsSet={expandedBlockIdsSet}
-            setExpandedBlockIdsSet={setExpandedBlockIdsSet}
+            expandBlockById={expandBlockById}
             renderProps={renderProps}
           />
         ))}
