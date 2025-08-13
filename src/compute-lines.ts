@@ -97,6 +97,7 @@ const computeDiff = (
     oldValue,
     newValue,
   );
+  console.log(compareMethod, diffArray);
   const computedDiff: ComputedDiffInformation = {
     left: [],
     right: [],
@@ -146,8 +147,8 @@ const computeLineInformation = (
   linesOffset: number = 0,
 ): ComputedLineInformation => {
   const diffArray = diff.diffLines(
-    oldString, // .trimRight(),
-    newString, // .trimRight(),
+    oldString.trimRight(),
+    newString.trimRight(),
     {
       newlineIsToken: true,
       ignoreWhitespace: false,

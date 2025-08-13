@@ -208,15 +208,7 @@ Also this info`;
             value: [
               {
                 type: 1,
-                value: "My Updat",
-              },
-              {
-                type: 0,
-                value: "e",
-              },
-              {
-                type: 1,
-                value: "d",
+                value: "My",
               },
               {
                 type: 0,
@@ -224,7 +216,15 @@ Also this info`;
               },
               {
                 type: 1,
-                value: "Name",
+                value: "Up",
+              },
+              {
+                type: 0,
+                value: "d",
+              },
+              {
+                type: 1,
+                value: "ated Name",
               },
             ],
           },
@@ -234,15 +234,7 @@ Also this info`;
             value: [
               {
                 type: 2,
-                value: "H",
-              },
-              {
-                type: 0,
-                value: "e",
-              },
-              {
-                type: 2,
-                value: "llo",
+                value: "Hello",
               },
               {
                 type: 0,
@@ -250,7 +242,11 @@ Also this info`;
               },
               {
                 type: 2,
-                value: "World",
+                value: "Worl",
+              },
+              {
+                type: 0,
+                value: "d",
               },
             ],
           },
@@ -284,15 +280,7 @@ Also this info`;
             value: [
               {
                 type: 1,
-                value: "My",
-              },
-              {
-                type: 0,
-                value: " ",
-              },
-              {
-                type: 1,
-                value: "Updated Name",
+                value: "My Updated Name",
               },
             ],
           },
@@ -302,15 +290,7 @@ Also this info`;
             value: [
               {
                 type: 2,
-                value: "Hello",
-              },
-              {
-                type: 0,
-                value: " ",
-              },
-              {
-                type: 2,
-                value: "World",
+                value: "Hello World",
               },
             ],
           },
