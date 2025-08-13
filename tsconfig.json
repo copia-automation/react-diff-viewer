@@ -9,8 +9,9 @@
     "declaration": true,
     "downlevelIteration": true,
     "lib": ["es2019", "dom"],
-    "types": ["mocha", "node"]
+    "types": ["mocha", "node"],
+    "skipLibCheck": true
   },
-  "include": ["./src/*", "enzyme.js"],
+  "include": ["./src/*"],
   "exclude": ["node_modules"]
 }
