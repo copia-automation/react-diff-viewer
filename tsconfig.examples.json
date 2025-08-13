@@ -2,12 +2,12 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "jsx": "react",
-    "module": "ES2020",
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "target": "es5",
     "downlevelIteration": true,
-    "lib": ["es2020", "dom"]
+    "lib": ["esnext", "dom"]
   },
   "exclude": ["node_modules"]
 }

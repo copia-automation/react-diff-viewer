@@ -204,8 +204,8 @@ function DiffViewer({
     };
 
     worker.postMessage({
-      oldValue: oldValue.slice(0, 10000),
-      newValue: newValue.slice(0, 10000),
+      oldValue, //: oldValue.slice(0, 10000),
+      newValue, //: newValue.slice(0, 10000),
       disableWordDiff,
       compareMethod,
       linesOffset,
@@ -227,6 +227,13 @@ function DiffViewer({
     showDiffOnly,
     expandedBlockIdsSet,
   ]);
+
+  const largestLineNumber = React.useMemo(() => {
+    return Math.max(
+      oldValue.split("\n").length + 1,
+      newValue.split("\n").length + 1,
+    );
+  }, [oldValue, newValue]);
 
   if (errorMessage) {
     if (ErrorDisplay) {
@@ -278,7 +285,7 @@ function DiffViewer({
         <Title
           {...renderProps}
           // This isn't exactly accurate, but should be good enough
-          largestPossibleLineNumber={linesToRender.length}
+          largestPossibleLineNumber={largestLineNumber}
         />
       )}
       itemContent={(index, line) => (

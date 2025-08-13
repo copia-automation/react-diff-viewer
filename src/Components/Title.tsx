@@ -19,7 +19,7 @@ export function Title({
   const colSpanOnInlineView = hideLineNumbers ? 2 : 4;
 
   const largestLineNumberCharacters = String(largestPossibleLineNumber).length;
-  const gutterWidth = largestLineNumberCharacters * 7 + 20;
+  const gutterWidth = largestLineNumberCharacters * 10 + 20;
 
   return (
     <>

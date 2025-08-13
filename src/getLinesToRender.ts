@@ -17,7 +17,6 @@ export type SkippedLineProps = {
   blockNumber: number;
   leftBlockLineNumber: number;
   rightBlockLineNumber: number;
-  // styles: ReactDiffViewerStyles,
 };
 
 export interface RenderSkippedLineProps extends SkippedLineProps {
