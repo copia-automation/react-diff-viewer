@@ -189,9 +189,6 @@ function DiffViewer({
   );
 
   React.useEffect(() => {
-    setLoading(true);
-    setErrorMessage(null);
-
     const worker = new Worker(
       new URL("./getLinesToRender.worker.js", import.meta.url),
     );
@@ -277,7 +274,13 @@ function DiffViewer({
         minHeight: 400,
       }}
       data={linesToRender}
-      fixedHeaderContent={() => <Title {...renderProps} />}
+      fixedHeaderContent={() => (
+        <Title
+          {...renderProps}
+          // This isn't exactly accurate, but should be good enough
+          largestPossibleLineNumber={linesToRender.length}
+        />
+      )}
       itemContent={(index, line) => (
         <RenderLineFromProps
           key={index}
@@ -294,11 +297,9 @@ function DiffViewer({
             className={cn(styles.diffContainer, {
               [styles.splitView]: splitView,
             })}
-            style={
-              {
-                // tableLayout: "fixed",
-              }
-            }
+            style={{
+              tableLayout: "fixed",
+            }}
           />
         ),
         TableRow: (props: object) => {
@@ -306,32 +307,12 @@ function DiffViewer({
           const item = props?.item as LineInformationProps | SkippedLineProps;
           const classNames = cn({
             [styles.codeFold]: "num" in item,
+            [styles.line]: !("num" in item),
           });
           return <tr className={classNames} {...props} />;
         },
       }}
     />
-  );
-
-  return (
-    <table
-      className={cn(styles.diffContainer, {
-        [styles.splitView]: splitView,
-      })}
-    >
-      <tbody>
-        <Title {...renderProps} />
-        {linesToRender.slice(0, 100).map((line, i) => (
-          <RenderLineFromProps
-            key={i}
-            line={line}
-            i={i}
-            expandBlockById={expandBlockById}
-            renderProps={renderProps}
-          />
-        ))}
-      </tbody>
-    </table>
   );
 }
 

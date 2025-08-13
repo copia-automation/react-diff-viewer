@@ -266,7 +266,7 @@ export default (
   });
 
   const marker = css({
-    width: 25,
+    width: 29,
     paddingLeft: 10,
     paddingRight: 10,
     userSelect: "none",

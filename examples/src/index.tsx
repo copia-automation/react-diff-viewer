@@ -5,9 +5,9 @@ import * as ReactDOM from "react-dom/client";
 import ReactDiff, { DiffMethod } from "../../lib/index";
 
 // eslint-disable-next-line
-const oldJs = require("./diff/javascript/old.rjs").default;
+const oldJs = require("./diff/javascript/oldMegaTags.rjs").default;
 // eslint-disable-next-line
-const newJs = require("./diff/javascript/new.rjs").default;
+const newJs = require("./diff/javascript/newMegaTags.rjs").default;
 // eslint-disable-next-line
 const logo = require("../../logo.png");
 
