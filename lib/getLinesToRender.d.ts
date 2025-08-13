@@ -1,5 +1,5 @@
 import { ReactDiffViewerProps } from ".";
-import { LineInformation } from "./compute-lines";
+import { LineInformation, DiffMethod } from "./compute-lines";
 import { ReactDiffViewerStyles } from "./styles";
 export declare enum LineNumberPrefix {
     LEFT = "L",
@@ -20,5 +20,14 @@ export interface LineInformationProps extends LineInformation {
 export interface ReactDiffViewerRenderProps extends ReactDiffViewerProps {
     styles: ReactDiffViewerStyles;
 }
-declare function getLinesToRender(renderProps: ReactDiffViewerRenderProps, expandedBlockIdsSet: Set<number>): Array<SkippedLineProps | LineInformationProps>;
+declare function getLinesToRender({ oldValue, newValue, disableWordDiff, compareMethod, linesOffset, extraLinesSurroundingDiff, showDiffOnly, expandedBlockIdsSet, }: {
+    oldValue: string;
+    newValue: string;
+    disableWordDiff: boolean;
+    compareMethod: DiffMethod;
+    linesOffset: number;
+    extraLinesSurroundingDiff: number;
+    showDiffOnly: boolean;
+    expandedBlockIdsSet: Set<number>;
+}): Array<SkippedLineProps | LineInformationProps>;
 export default getLinesToRender;

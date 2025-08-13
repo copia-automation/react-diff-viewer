@@ -21,6 +21,7 @@ export default defineConfig([globalIgnores([
     'webpack.config.js',
     'lib',
     'examples',
+    'src/getLinesToRender.worker.ts'
 ]), {
     extends: compat.extends('plugin:@typescript-eslint/recommended', 'plugin:react/recommended'),
 

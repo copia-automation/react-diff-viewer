@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "ES2020",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "target": "es5",
@@ -12,15 +12,6 @@
     "types": ["mocha", "node"],
     "skipLibCheck": true
   },
-  "include": [
-    "./src/*",
-    "src/Components/Title.tsx",
-    "src/Components/InlineView.tsx",
-    "src/Components/Line.tsx",
-    "src/Components/Node.tsx",
-    "src/Components/SkippedLineIndicator.tsx",
-    "src/Components/RenderSplitView.tsx",
-    "src/Components/WordDiff.tsx"
-  ],
+  "include": ["./src/**/*"],
   "exclude": ["node_modules"]
 }

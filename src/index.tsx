@@ -3,7 +3,7 @@ import cn from "classnames";
 
 import { DiffMethod } from "./compute-lines";
 import computeStyles, { ReactDiffViewerStylesOverride } from "./styles";
-import getLinesToRender, {
+import {
   LineInformationProps,
   ReactDiffViewerRenderProps,
   SkippedLineProps,
@@ -60,6 +60,12 @@ export interface ReactDiffViewerProps {
     node: React.ReactElement,
     index: number,
   ) => React.ReactElement;
+  LoadingIndicator?: () => React.ReactElement;
+  ErrorDisplay?: ({
+    errorMessage,
+  }: {
+    errorMessage: string;
+  }) => React.ReactElement;
 }
 
 function RenderLineFromProps({
@@ -126,11 +132,18 @@ function DiffViewer({
   showDiffOnly = true,
   useDarkTheme = false,
   linesOffset = 0,
+  LoadingIndicator,
+  ErrorDisplay,
   ...rest
 }: ReactDiffViewerProps) {
   const [expandedBlockIdsSet, setExpandedBlockIdsSet] = React.useState<
     Set<number>
   >(new Set());
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState<boolean>(true);
+  const [linesToRender, setLinesToRender] = React.useState<
+    Array<LineInformationProps | SkippedLineProps>
+  >([]);
 
   const props = {
     oldValue,
@@ -162,10 +175,75 @@ function DiffViewer({
     }),
     [props, styles],
   );
-  const linesToRender = React.useMemo(
-    () => getLinesToRender(renderProps, expandedBlockIdsSet).slice(0, 100),
-    [renderProps, expandedBlockIdsSet],
-  );
+
+  React.useEffect(() => {
+    const worker = new Worker(
+      new URL("./getLinesToRender.worker.js", import.meta.url),
+    );
+    worker.onmessage = (e) => {
+      const { success, data, error } = e.data;
+      if (success) {
+        setLinesToRender(data);
+      } else {
+        setErrorMessage(error);
+      }
+
+      setLoading(false);
+    };
+
+    worker.postMessage({
+      oldValue,
+      newValue,
+      disableWordDiff,
+      compareMethod,
+      linesOffset,
+      extraLinesSurroundingDiff,
+      showDiffOnly,
+      expandedBlockIdsSet,
+    });
+
+    return () => {
+      worker.terminate();
+    };
+  }, []);
+
+  if (errorMessage) {
+    if (ErrorDisplay) {
+      return <ErrorDisplay errorMessage={errorMessage} />;
+    }
+
+    return (
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #ff0000",
+          width: "100%",
+          height: "100%",
+          borderRadius: 2,
+        }}
+      >
+        <p>{errorMessage}</p>
+      </div>
+    );
+  }
+
+  if (loading) {
+    if (LoadingIndicator) {
+      return <LoadingIndicator />;
+    }
+
+    return (
+      <div
+        style={{
+          background: "#fff",
+          width: "100%",
+          height: "100%",
+        }}
+      >
+        <p>Loading...</p>
+      </div>
+    );
+  }
 
   return (
     <table

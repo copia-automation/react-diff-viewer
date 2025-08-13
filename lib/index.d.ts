@@ -20,7 +20,11 @@ export interface ReactDiffViewerProps {
     leftTitle?: string | React.ReactElement;
     rightTitle?: string | React.ReactElement;
     renderNodeWrapper?: (node: React.ReactElement, index: number) => React.ReactElement;
+    LoadingIndicator?: () => React.ReactElement;
+    ErrorDisplay?: ({ errorMessage, }: {
+        errorMessage: string;
+    }) => React.ReactElement;
 }
-declare function DiffViewer({ oldValue, newValue, splitView, highlightLines, disableWordDiff, compareMethod, styles: styleOverrides, hideLineNumbers, extraLinesSurroundingDiff, showDiffOnly, useDarkTheme, linesOffset, ...rest }: ReactDiffViewerProps): React.JSX.Element;
+declare function DiffViewer({ oldValue, newValue, splitView, highlightLines, disableWordDiff, compareMethod, styles: styleOverrides, hideLineNumbers, extraLinesSurroundingDiff, showDiffOnly, useDarkTheme, linesOffset, LoadingIndicator, ErrorDisplay, ...rest }: ReactDiffViewerProps): React.JSX.Element;
 export default DiffViewer;
 export { ReactDiffViewerStylesOverride, DiffMethod };

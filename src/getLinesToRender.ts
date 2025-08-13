@@ -3,6 +3,7 @@ import {
   computeLineInformation,
   LineInformation,
   DiffType,
+  DiffMethod,
 } from "./compute-lines";
 import { ReactDiffViewerStyles } from "./styles";
 
@@ -30,18 +31,25 @@ export interface ReactDiffViewerRenderProps extends ReactDiffViewerProps {
   styles: ReactDiffViewerStyles;
 }
 
-function getLinesToRender(
-  renderProps: ReactDiffViewerRenderProps,
-  expandedBlockIdsSet: Set<number>,
-): Array<SkippedLineProps | LineInformationProps> {
-  const {
-    oldValue,
-    newValue,
-    // splitView,
-    disableWordDiff,
-    compareMethod,
-    linesOffset,
-  } = renderProps;
+function getLinesToRender({
+  oldValue,
+  newValue,
+  disableWordDiff,
+  compareMethod,
+  linesOffset,
+  extraLinesSurroundingDiff,
+  showDiffOnly,
+  expandedBlockIdsSet,
+}: {
+  oldValue: string;
+  newValue: string;
+  disableWordDiff: boolean;
+  compareMethod: DiffMethod;
+  linesOffset: number;
+  extraLinesSurroundingDiff: number;
+  showDiffOnly: boolean;
+  expandedBlockIdsSet: Set<number>;
+}): Array<SkippedLineProps | LineInformationProps> {
   const { lineInformation, diffLines } = computeLineInformation(
     oldValue,
     newValue,
@@ -50,9 +58,7 @@ function getLinesToRender(
     linesOffset,
   );
   const extraLines =
-    renderProps.extraLinesSurroundingDiff < 0
-      ? 0
-      : renderProps.extraLinesSurroundingDiff;
+    extraLinesSurroundingDiff < 0 ? 0 : extraLinesSurroundingDiff;
   let skippedLines: number[] = [];
   let diffLinesIndex = 0;
   const lines: Array<SkippedLineProps | LineInformationProps> = [];
@@ -61,7 +67,7 @@ function getLinesToRender(
     (line: LineInformation, i: number): React.ReactElement => {
       const diffBlockStart = diffLines[diffLinesIndex];
       const currentPosition = diffBlockStart - i;
-      if (renderProps.showDiffOnly) {
+      if (showDiffOnly) {
         if (currentPosition === -extraLines) {
           skippedLines = [];
           diffLinesIndex += 1;
