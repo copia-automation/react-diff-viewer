@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DiffMethod } from "./compute-lines";
-import { ReactDiffViewerStylesOverride } from "./styles";
+import { ReactDiffViewerStylesOverride } from "./Components/styles";
 export interface ReactDiffViewerProps {
     oldValue: string;
     newValue: string;

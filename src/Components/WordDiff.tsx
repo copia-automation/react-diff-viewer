@@ -1,7 +1,7 @@
 import { default as cn } from "classnames";
 import * as React from "react";
 import { DiffInformation, DiffType } from "../compute-lines";
-import { ReactDiffViewerStyles } from "../styles";
+import { ReactDiffViewerStyles } from "./styles";
 
 export function WordDiff({
   diffArray,

@@ -19,24 +19,24 @@ export function InlineView({
   if (left.type === DiffType.REMOVED && right.type === DiffType.ADDED) {
     return (
       <React.Fragment key={index}>
-        <tr className={renderProps.styles.line}>
-          <Line
-            lineNumber={left.lineNumber}
-            type={left.type}
-            prefix={LineNumberPrefix.LEFT}
-            value={left.value}
-            renderProps={renderProps}
-          />
-        </tr>
-        <tr className={renderProps.styles.line}>
-          <Line
-            lineNumber={null}
-            type={right.type}
-            prefix={LineNumberPrefix.RIGHT}
-            value={right.value}
-            renderProps={renderProps}
-          />
-        </tr>
+        {/* <tr className={renderProps.styles.line}> */}
+        <Line
+          lineNumber={left.lineNumber}
+          type={left.type}
+          prefix={LineNumberPrefix.LEFT}
+          value={left.value}
+          renderProps={renderProps}
+        />
+        {/* </tr> */}
+        {/* <tr className={renderProps.styles.line}> */}
+        <Line
+          lineNumber={null}
+          type={right.type}
+          prefix={LineNumberPrefix.RIGHT}
+          value={right.value}
+          renderProps={renderProps}
+        />
+        {/* </tr> */}
       </React.Fragment>
     );
   }
@@ -79,8 +79,10 @@ export function InlineView({
   }
 
   return (
-    <tr key={index} className={renderProps.styles.line}>
+    <>
+      {/* <tr key={index} className={renderProps.styles.line}> */}
       {content}
-    </tr>
+      {/* </tr> */}
+    </>
   );
 }

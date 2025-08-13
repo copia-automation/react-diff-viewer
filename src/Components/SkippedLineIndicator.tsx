@@ -44,10 +44,11 @@ export function SkippedLineIndicator({
   );
   const isUnifiedViewWithoutLineNumbers = !splitView && !hideLineNumbers;
   return (
-    <tr
+    <>
+      {/* <tr
       key={`${leftBlockLineNumber}-${rightBlockLineNumber}`}
       className={renderProps.styles.codeFold}
-    >
+    > */}
       {!hideLineNumbers && <td className={renderProps.styles.codeFoldGutter} />}
       <td
         className={cn({
@@ -70,6 +71,7 @@ export function SkippedLineIndicator({
 
       <td />
       <td />
-    </tr>
+      {/* </tr> */}
+    </>
   );
 }

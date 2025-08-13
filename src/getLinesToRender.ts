@@ -5,7 +5,7 @@ import {
   DiffType,
   DiffMethod,
 } from "./compute-lines";
-import { ReactDiffViewerStyles } from "./styles";
+import { ReactDiffViewerStyles } from "./Components/styles";
 
 export enum LineNumberPrefix {
   LEFT = "L",

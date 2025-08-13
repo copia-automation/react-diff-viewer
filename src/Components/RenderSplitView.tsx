@@ -16,7 +16,8 @@ export function SplitView({
   index: number;
 }) {
   return (
-    <tr key={index} className={renderProps.styles.line}>
+    <>
+      {/* <tr key={index} className={renderProps.styles.line}> */}
       <Line
         lineNumber={left.lineNumber}
         type={left.type}
@@ -31,6 +32,7 @@ export function SplitView({
         value={right.value}
         renderProps={renderProps}
       />
-    </tr>
+      {/* </tr> */}
+    </>
   );
 }

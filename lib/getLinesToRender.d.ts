@@ -1,6 +1,6 @@
 import { ReactDiffViewerProps } from ".";
 import { LineInformation, DiffMethod } from "./compute-lines";
-import { ReactDiffViewerStyles } from "./styles";
+import { ReactDiffViewerStyles } from "./Components/styles";
 export declare enum LineNumberPrefix {
     LEFT = "L",
     RIGHT = "R"

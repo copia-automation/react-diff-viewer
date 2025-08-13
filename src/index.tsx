@@ -2,7 +2,9 @@ import * as React from "react";
 import cn from "classnames";
 
 import { DiffMethod } from "./compute-lines";
-import computeStyles, { ReactDiffViewerStylesOverride } from "./styles";
+import computeStyles, {
+  ReactDiffViewerStylesOverride,
+} from "./Components/styles";
 import {
   LineInformationProps,
   ReactDiffViewerRenderProps,
@@ -13,6 +15,7 @@ import { SplitView } from "./Components/RenderSplitView";
 import { Node } from "./Components/Node";
 import { InlineView } from "./Components/InlineView";
 import { SkippedLineIndicator } from "./Components/SkippedLineIndicator";
+import { TableVirtuoso } from "react-virtuoso";
 
 export interface ReactDiffViewerProps {
   // Old value to compare.
@@ -192,8 +195,8 @@ function DiffViewer({
     };
 
     worker.postMessage({
-      oldValue,
-      newValue,
+      oldValue: oldValue.slice(0, 10000),
+      newValue: newValue.slice(0, 10000),
       disableWordDiff,
       compareMethod,
       linesOffset,
@@ -244,6 +247,38 @@ function DiffViewer({
       </div>
     );
   }
+
+  return (
+    <TableVirtuoso
+      style={{
+        width: "100%",
+        height: "100%",
+        minHeight: 400,
+      }}
+      data={linesToRender}
+      fixedHeaderContent={() => <Title {...renderProps} />}
+      itemContent={(index, line) => (
+        <RenderLineFromProps
+          key={index}
+          line={line}
+          i={index}
+          expandedBlockIdsSet={expandedBlockIdsSet}
+          setExpandedBlockIdsSet={setExpandedBlockIdsSet}
+          renderProps={renderProps}
+        />
+      )}
+      components={{
+        Table: (props: object) => (
+          <table
+            {...props}
+            className={cn(styles.diffContainer, {
+              [styles.splitView]: splitView,
+            })}
+          />
+        ),
+      }}
+    />
+  );
 
   return (
     <table
