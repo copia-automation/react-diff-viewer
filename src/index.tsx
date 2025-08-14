@@ -90,7 +90,7 @@ function RenderLineFromProps({
   return <InlineView {...line} />;
 }
 
-const TableRow = React.forwardRef(
+const TableRowWithRef = React.forwardRef(
   (
     props: {
       item: LineInformation | SkippedLine;
@@ -104,15 +104,21 @@ const TableRow = React.forwardRef(
       [styles.line]: !("num" in item),
     });
 
-    return (
-      <Node index={item.diffIndex}>
-        <tr ref={ref} className={classNames} {...props} />
-      </Node>
-    );
+    return <tr ref={ref} className={classNames} {...props} />;
   },
 );
 
-TableRow.displayName = "TableRow";
+TableRowWithRef.displayName = "TableRowWithRef";
+
+function TableRow(props: { item: LineInformation | SkippedLine }) {
+  const diffIndex = props.item.diffIndex;
+
+  return (
+    <Node index={diffIndex}>
+      <TableRowWithRef {...props} />
+    </Node>
+  );
+}
 
 function DiffViewer({
   oldValue = "",
