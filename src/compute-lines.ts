@@ -1,7 +1,15 @@
 import * as diff from "diff";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const jsDiff: { [key: string]: any } = diff;
+// Create a Map of allowed diff methods to their corresponding functions
+const jsDiffMethods: Map<string, Function> = new Map([
+  ["diffChars", diff.diffChars],
+  ["diffWords", diff.diffWords],
+  ["diffWordsWithSpace", diff.diffWordsWithSpace],
+  ["diffLines", diff.diffLines],
+  ["diffTrimmedLines", diff.diffTrimmedLines],
+  ["diffSentences", diff.diffSentences],
+  ["diffCss", diff.diffCss],
+]);
 
 export enum DiffType {
   DEFAULT = 0,
@@ -93,20 +101,20 @@ const computeDiff = (
   newValue: string,
   compareMethod: string = DiffMethod.CHARS,
 ): ComputedDiffInformation => {
-  // Allowlist check: only allow valid DiffMethod values and own properties that are functions
+  // Allowlist check: only allow valid DiffMethod values and methods present in jsDiffMethods Map
   const allowedMethods = Object.values(DiffMethod);
   let methodToUse = DiffMethod.CHARS;
   if (
     allowedMethods.includes(compareMethod as DiffMethod) &&
-    Object.prototype.hasOwnProperty.call(jsDiff, compareMethod) &&
-    typeof jsDiff[compareMethod] === "function"
+    jsDiffMethods.has(compareMethod) &&
+    typeof jsDiffMethods.get(compareMethod) === "function"
   ) {
     methodToUse = compareMethod as DiffMethod;
   }
-  const diffArray: JsDiffChangeObject[] = jsDiff[methodToUse](
-    oldValue,
-    newValue,
-  );
+  const diffFn = jsDiffMethods.get(methodToUse);
+  const diffArray: JsDiffChangeObject[] = diffFn
+    ? diffFn(oldValue, newValue)
+    : [];
 
   const computedDiff: ComputedDiffInformation = {
     left: [],
