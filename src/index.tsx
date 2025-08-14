@@ -73,36 +73,47 @@ export interface ReactDiffViewerProps {
 
 function RenderLineFromProps({
   line,
-  i,
   expandBlockById,
 }: {
   line: LineInformation | SkippedLine;
-  i: number;
   expandBlockById: (id: number) => void;
 }) {
   const { splitView } = useReactDiffViewerContext();
   if ("num" in line) {
-    return (
-      <Node key={i} index={i}>
-        <SkippedLineIndicator {...line} expandBlockById={expandBlockById} />
-      </Node>
-    );
+    return <SkippedLineIndicator {...line} expandBlockById={expandBlockById} />;
   }
 
   if (splitView) {
-    return (
-      <Node key={i} index={i}>
-        <SplitView {...line} />
-      </Node>
-    );
+    return <SplitView {...line} />;
   }
 
-  return (
-    <Node key={i} index={i}>
-      <InlineView {...line} />
-    </Node>
-  );
+  return <InlineView {...line} />;
 }
+
+const TableRow = React.forwardRef(
+  (
+    props: {
+      item: LineInformation | SkippedLine;
+    },
+    ref: React.Ref<HTMLTableRowElement>,
+  ) => {
+    console.log(props);
+    const { styles } = useReactDiffViewerContext();
+    const item = props.item;
+    const classNames = cn({
+      [styles.codeFold]: "num" in item,
+      [styles.line]: !("num" in item),
+    });
+
+    return (
+      <Node index={item.diffIndex}>
+        <tr ref={ref} className={classNames} {...props} />
+      </Node>
+    );
+  },
+);
+
+TableRow.displayName = "TableRow";
 
 function DiffViewer({
   oldValue = "",
@@ -273,7 +284,6 @@ function DiffViewer({
           <RenderLineFromProps
             key={index}
             line={line}
-            i={index}
             expandBlockById={expandBlockById}
           />
         )}
@@ -289,15 +299,7 @@ function DiffViewer({
               }}
             />
           ),
-          TableRow: (props: object) => {
-            // @ts-expect-error Haven't figured out props typing yet
-            const item = props?.item as LineInformation | SkippedLine;
-            const classNames = cn({
-              [styles.codeFold]: "num" in item,
-              [styles.line]: !("num" in item),
-            });
-            return <tr className={classNames} {...props} />;
-          },
+          TableRow,
         }}
       />
     </ReactDiffViewerContextProvider>

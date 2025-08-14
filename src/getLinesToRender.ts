@@ -17,6 +17,7 @@ export type SkippedLine = {
   blockNumber: number;
   leftBlockLineNumber: number;
   rightBlockLineNumber: number;
+  diffIndex: number;
 };
 
 export interface ReactDiffViewerContext extends ReactDiffViewerProps {
@@ -77,6 +78,7 @@ function getLinesToRender({
               blockNumber: diffBlockStart,
               leftBlockLineNumber: line.left.lineNumber,
               rightBlockLineNumber: line.right.lineNumber,
+              diffIndex: line.diffIndex,
             });
             return;
           }
@@ -92,6 +94,7 @@ function getLinesToRender({
           blockNumber: diffBlockStart,
           leftBlockLineNumber: line.left.lineNumber,
           rightBlockLineNumber: line.right.lineNumber,
+          diffIndex: line.diffIndex,
         });
         return;
       }

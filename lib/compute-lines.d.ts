@@ -20,6 +20,7 @@ export interface DiffInformation {
 export interface LineInformation {
     left?: DiffInformation;
     right?: DiffInformation;
+    diffIndex: number;
 }
 export interface ComputedLineInformation {
     lineInformation: LineInformation[];

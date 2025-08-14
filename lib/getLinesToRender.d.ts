@@ -10,6 +10,7 @@ export type SkippedLine = {
     blockNumber: number;
     leftBlockLineNumber: number;
     rightBlockLineNumber: number;
+    diffIndex: number;
 };
 export interface ReactDiffViewerContext extends ReactDiffViewerProps {
     styles: ReactDiffViewerStyles;

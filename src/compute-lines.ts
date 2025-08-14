@@ -39,6 +39,7 @@ export interface DiffInformation {
 export interface LineInformation {
   left?: DiffInformation;
   right?: DiffInformation;
+  diffIndex: number;
 }
 
 export interface ComputedLineInformation {
@@ -274,9 +275,11 @@ const computeLineInformation = (
         lineInformation.push({
           left,
           right,
+          diffIndex: diffIndex + counter - 1,
         });
       }
-      return [{ right, left }];
+
+      return [{ right, left, diffIndex: diffIndex + counter - 1 }];
     });
   };
 
