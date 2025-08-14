@@ -1,46 +1,48 @@
-// import { shallow } from 'enzyme';
-// import * as React from 'react';
-// import expect from 'expect';
+import "@vitest/web-worker";
+import * as React from "react";
+import { describe, it, expect } from "vitest";
+import { render, screen, waitFor } from "@testing-library/react";
 
-// import DiffViewer from '../lib/index';
+import DiffViewer from "../lib/index";
 
-// const oldCode = `
-// const a = 123
-// const b = 456
-// const c = 4556
-// const d = 4566
-// const e = () => {
-//   console.log('c')
-// }
-// `;
+const oldCode = `
+const a = 123
+const b = 456
+const c = 4556
+const d = 4566
+const e = () => {
+  console.log('c')
+}
+`;
 
-// const newCode = `
-// const a = 123
-// const b = 456
-// const c = 4556
-// const d = 4566
-// const aa = 123
-// const bb = 456
-// `;
+const newCode = `
+const a = 123
+const b = 456
+const c = 4556
+const d = 4566
+const aa = 123
+const bb = 456
+`;
 
-// describe('Testing react diff viewer', (): void => {
-//   it('It should render a table', (): void => {
-//     const node = shallow(<DiffViewer oldValue={oldCode} newValue={newCode} />);
+describe("Testing react diff viewer", (): void => {
+  it("It should render a table", async () => {
+    render(<DiffViewer oldValue={oldCode} newValue={newCode} />);
 
-//     expect(node.find('table').length).toEqual(1);
-//   });
+    waitFor(() => {
+      const tables = screen.getAllByRole("table");
+      expect(tables.length).toEqual(1);
+    });
+  });
 
-//   it('It should render diff lines in diff view', (): void => {
-//     const node = shallow(<DiffViewer oldValue={oldCode} newValue={newCode} />);
+  it("It should render react-virtuoso table", async () => {
+    render(<DiffViewer oldValue={oldCode} newValue={newCode} />);
 
-//     expect(node.find('table > tbody tr').length).toEqual(7);
-//   });
+    waitFor(() => {
+      const tables = screen.getAllByRole("table");
+      expect(tables.length).toEqual(1);
 
-//   it('It should render diff lines in inline view', (): void => {
-//     const node = shallow(
-//       <DiffViewer oldValue={oldCode} newValue={newCode} splitView={false} />,
-//     );
-
-//     expect(node.find('table > tbody tr').length).toEqual(9);
-//   });
-// });
+      const virtuosoEl = screen.getAllByTestId("virtuoso-item-list");
+      expect(virtuosoEl.length).toEqual(1);
+    });
+  });
+});

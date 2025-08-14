@@ -97,11 +97,12 @@ const computeDiff = (
     oldValue,
     newValue,
   );
-  console.log(compareMethod, diffArray);
+
   const computedDiff: ComputedDiffInformation = {
     left: [],
     right: [],
   };
+
   diffArray.forEach(({ added, removed, value }): DiffInformation => {
     const diffInformation: DiffInformation = {};
     if (added) {
