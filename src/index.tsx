@@ -97,7 +97,6 @@ const TableRow = React.forwardRef(
     },
     ref: React.Ref<HTMLTableRowElement>,
   ) => {
-    console.log(props);
     const { styles } = useReactDiffViewerContext();
     const item = props.item;
     const classNames = cn({
