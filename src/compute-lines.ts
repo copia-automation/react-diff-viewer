@@ -1,6 +1,8 @@
 import * as diff from "diff";
 
 // Create a Map of allowed diff methods to their corresponding functions
+// The "Function" comes from a codeql fix. Will look at how to fix
+// eslint-disable-next-line
 const jsDiffMethods: Map<string, Function> = new Map([
   ["diffChars", diff.diffChars],
   ["diffWords", diff.diffWords],
