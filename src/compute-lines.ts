@@ -93,7 +93,17 @@ const computeDiff = (
   newValue: string,
   compareMethod: string = DiffMethod.CHARS,
 ): ComputedDiffInformation => {
-  const diffArray: JsDiffChangeObject[] = jsDiff[compareMethod](
+  // Allowlist check: only allow valid DiffMethod values and own properties that are functions
+  const allowedMethods = Object.values(DiffMethod);
+  let methodToUse = DiffMethod.CHARS;
+  if (
+    allowedMethods.includes(compareMethod as DiffMethod) &&
+    Object.prototype.hasOwnProperty.call(jsDiff, compareMethod) &&
+    typeof jsDiff[compareMethod] === "function"
+  ) {
+    methodToUse = compareMethod as DiffMethod;
+  }
+  const diffArray: JsDiffChangeObject[] = jsDiff[methodToUse](
     oldValue,
     newValue,
   );
