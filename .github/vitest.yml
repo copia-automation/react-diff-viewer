@@ -1,0 +1,47 @@
+name: Build & Test
+on:
+  pull_request:
+  merge_group:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    env:
+      WORKING_DIRECTORY: ./
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 20.19.4
+          cache: "yarn"
+          cache-dependency-path: "${{ env.WORKING_DIRECTORY }}/yarn.lock"
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Lint
+        run: yarn lint
+  build-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    env:
+      WORKING_DIRECTORY: ./
+    steps:
+      - uses: actions/checkout@v4.2.2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: 20.19.4
+          cache: "yarn"
+          cache-dependency-path: "${{ env.WORKING_DIRECTORY }}/yarn.lock"
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build
+        run: yarn build
+
+      - name: Test
+        run: yarn test
