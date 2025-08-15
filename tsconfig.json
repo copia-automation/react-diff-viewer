@@ -2,18 +2,16 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "jsx": "react",
-    "module": "commonjs",
+    "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
     "target": "es5",
     "declaration": true,
     "downlevelIteration": true,
-    "lib": ["es2017", "dom"],
-    "types": [
-      "mocha",
-      "node"
-    ]
+    "lib": ["esnext", "dom"],
+    "types": ["mocha", "node"],
+    "skipLibCheck": true
   },
-  "include": ["./src/*", "enzyme.js"],
-  "exclude": ["node_modules"],
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"]
 }

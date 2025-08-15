@@ -91,7 +91,7 @@ class Diff extends PureComponent {
 
 ## Syntax Highlighting
 
-Syntax highlighting is a bit tricky when combined with diff. Here, React Diff Viewer provides a simple render prop API to handle syntax highlighting. Use `renderContent(content: string) => JSX.Element` and your favorite syntax highlighting library to achieve this.
+Syntax highlighting is a bit tricky when combined with diff. Here, React Diff Viewer provides a simple render prop API to handle syntax highlighting. Use `renderContent(content: string) => React.ReactElement` and your favorite syntax highlighting library to achieve this.
 
 An example using [Prism JS](https://prismjs.com)
 

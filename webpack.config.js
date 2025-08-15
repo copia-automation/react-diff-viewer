@@ -1,24 +1,24 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const FavIconsWebpackPlugin = require('favicons-webpack-plugin');
+const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const FavIconsWebpackPlugin = require("favicons-webpack-plugin");
 
 module.exports = {
   entry: {
-    main: './examples/src/index.tsx',
+    main: "./examples/src/index.tsx",
   },
-  mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  mode: process.env.NODE_ENV === "production" ? "production" : "development",
   resolve: {
-    extensions: ['.jsx', '.tsx', '.ts', '.scss', '.css', '.js'],
+    extensions: [".jsx", ".tsx", ".ts", ".scss", ".css", ".js"],
   },
   output: {
-    path: path.resolve(__dirname, 'examples/dist'),
-    filename: '[name].js',
+    path: path.resolve(__dirname, "examples/dist"),
+    filename: "[name].js",
     clean: true, // Cleans the output folder in Webpack 5
   },
   devServer: {
     static: {
-      directory: path.resolve(__dirname, 'examples/dist'),
+      directory: path.resolve(__dirname, "examples/dist"),
     },
     port: 8000,
     hot: true,
@@ -29,9 +29,9 @@ module.exports = {
         test: /\.tsx?$/,
         use: [
           {
-            loader: 'ts-loader',
+            loader: "ts-loader",
             options: {
-              configFile: 'tsconfig.examples.json',
+              configFile: "tsconfig.examples.json",
             },
           },
         ],
@@ -39,29 +39,25 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ],
+        use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
       },
       {
         test: /\.(xml|rjs|java)$/,
-        use: 'raw-loader',
+        use: "raw-loader",
       },
       {
         test: /\.(svg|png)$/,
-        type: 'asset/resource', // Replaces file-loader
+        type: "asset/resource", // Replaces file-loader
       },
     ],
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './examples/src/index.ejs',
+      template: "./examples/src/index.ejs",
     }),
-    new FavIconsWebpackPlugin('./logo-standalone.png'),
+    new FavIconsWebpackPlugin("./logo-standalone.png"),
     new MiniCssExtractPlugin({
-      filename: 'main.css',
+      filename: "main.css",
     }),
   ],
 };
