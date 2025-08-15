@@ -1,6 +1,6 @@
 {
   "name": "@copia-automation/react-diff-viewer",
-  "version": "4.0.0-BZ-2025-08-16.2",
+  "version": "4.0.0-BZ-2025-08-16.3",
   "private": false,
   "description": "A simple and beautiful text diff viewer component made with diff and React",
   "keywords": [
@@ -27,9 +27,10 @@
   "main": "lib/index",
   "typings": "lib/index",
   "scripts": {
-    "build": "tsc --outDir lib/",
+    "build": "yarn build:worker && tsc --outDir lib/",
     "build:examples": "webpack",
     "build:watch": "tsc --outDir lib/ -w",
+    "build:worker": "esbuild src/getLinesToRenderWorker.ts --bundle --platform=browser --format=iife --minify --outfile=lib/getLinesToRender.worker.js",
     "lint": "yarn prettier && eslint",
     "lint:fix": "yarn prettier --write && yarn eslint --fix",
     "prettier": "prettier --check \"./**/*.{ts,tsx,js,json,jsx,scss,html,yaml,yml}\"",
