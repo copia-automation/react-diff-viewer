@@ -30,7 +30,7 @@
     "build": "yarn build:worker && tsc --outDir lib/",
     "build:examples": "webpack",
     "build:watch": "tsc --outDir lib/ -w",
-    "build:worker": "esbuild src/getLinesToRenderWorker.ts --bundle --outfile=lib/getLinesToRender.worker.js",
+    "build:worker": "node scripts/buildWorker.mjs",
     "lint": "yarn prettier && eslint",
     "lint:fix": "yarn prettier --write && yarn eslint --fix",
     "prettier": "prettier --check \"./**/*.{ts,tsx,js,json,jsx,scss,html,yaml,yml}\"",

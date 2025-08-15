@@ -1,6 +1,7 @@
 import * as React from "react";
 import { DiffMethod } from "./compute-lines";
 import { ReactDiffViewerStylesOverride } from "./Components/styles";
+export declare function createLinesToRenderWorker(): Worker;
 export interface ReactDiffViewerProps {
     oldValue: string;
     newValue: string;

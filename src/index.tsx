@@ -16,7 +16,13 @@ import {
   ReactDiffViewerContextProvider,
   useReactDiffViewerContext,
 } from "./context";
+import { getLinesToRenderWorkerCode } from './generated/workerCode'
 
+export function createLinesToRenderWorker(): Worker {
+  const blob = new Blob([getLinesToRenderWorkerCode], { type: 'text/javascript' })
+  const url = URL.createObjectURL(blob)
+  return new Worker(url) // add { type: 'module' } if you built format:'esm'
+}
 export interface ReactDiffViewerProps {
   // Old value to compare.
   oldValue: string;
@@ -186,9 +192,7 @@ function DiffViewer({
   );
 
   React.useEffect(() => {
-    const worker = new Worker(
-      new URL("./getLinesToRender.worker.js", import.meta.url),
-    );
+    const worker = createLinesToRenderWorker()
     worker.onmessage = (e) => {
       const { success, data, error } = e.data;
       if (success) {
