@@ -1,8 +1,8 @@
 import "./style.scss";
 import * as React from "react";
 import * as ReactDOM from "react-dom/client";
-import * as Prism from 'prismjs';
-import 'prismjs/components/prism-javascript';
+import * as Prism from "prismjs";
+import "prismjs/components/prism-javascript";
 
 import ReactDiff, { DiffMethod } from "../../lib/index";
 
@@ -54,7 +54,11 @@ class Example extends React.Component<object, ExampleState> {
 
   private syntaxHighlight = (str: string): React.ReactElement => {
     if (!str) return <></>;
-    const language = Prism.highlight(str, Prism.languages.javascript, 'javascript');
+    const language = Prism.highlight(
+      str,
+      Prism.languages.javascript,
+      "javascript",
+    );
     return <span dangerouslySetInnerHTML={{ __html: language }} />;
   };
 
