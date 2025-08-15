@@ -59,7 +59,7 @@ class Example extends React.Component<object, ExampleState> {
     return <span dangerouslySetInnerHTML={{ __html: language }} />;
   };
 
-  public render(): JSX.Element {
+  public render(): React.JSX.Element {
     return (
       <div className="react-diff-viewer-example">
         <div className="radial"></div>
