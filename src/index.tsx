@@ -186,7 +186,10 @@ function DiffViewer({
   );
 
   React.useEffect(() => {
-    const worker = new Worker(new URL("./getLinesToRender.worker.js", import.meta.url), { type: "module" });
+    const worker = new Worker(
+      new URL("./getLinesToRender.worker.js", import.meta.url),
+      { type: "module" },
+    );
     worker.onmessage = (e) => {
       const { success, data, error } = e.data;
       if (success) {
