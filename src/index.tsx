@@ -69,6 +69,7 @@ export interface ReactDiffViewerProps {
   }: {
     errorMessage: string;
   }) => React.ReactElement;
+  containerHeight?: React.CSSProperties["height"];
 }
 
 function RenderLineFromProps({
@@ -135,6 +136,7 @@ function DiffViewer({
   linesOffset = 0,
   LoadingIndicator,
   ErrorDisplay,
+  containerHeight = 800,
   ...rest
 }: ReactDiffViewerProps) {
   const [expandedBlockIdsSet, setExpandedBlockIdsSet] = React.useState<
@@ -277,7 +279,7 @@ function DiffViewer({
         style={{
           width: "100%",
           maxHeight: "100%",
-          height: 1000,
+          height: containerHeight,
         }}
         data={linesToRender}
         fixedHeaderContent={() => (
