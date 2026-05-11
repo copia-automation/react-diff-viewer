@@ -5,9 +5,8 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
-    "target": "es5",
+    "target": "es6",
     "declaration": true,
-    "downlevelIteration": true,
     "lib": ["esnext", "dom"],
     "types": ["mocha", "node"],
     "skipLibCheck": true
