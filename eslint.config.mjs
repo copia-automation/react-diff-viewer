@@ -35,7 +35,6 @@ export default defineConfig([globalIgnores([
         parser: tsParser,
         ecmaVersion: 5,
         globals: {
-            ...globals.mocha,
             ...globals.node,
             ...globals.browser,
         },
