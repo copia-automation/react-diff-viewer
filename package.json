@@ -28,13 +28,13 @@
   "typings": "lib/index",
   "scripts": {
     "build": "yarn build:worker && tsc --outDir lib/",
-    "build:examples": "webpack",
+    "build:examples": "vite build",
     "build:watch": "tsc --outDir lib/ -w",
     "build:worker": "esbuild src/getLinesToRenderWorker.ts --bundle --platform=browser --format=iife --minify --outfile=lib/getLinesToRender.worker.js",
     "lint": "yarn prettier && eslint",
     "lint:fix": "yarn prettier --write && yarn eslint --fix",
     "prettier": "prettier --check \"./**/*.{ts,tsx,js,json,jsx,scss,html,yaml,yml}\"",
-    "start:examples": "webpack-dev-server --open",
+    "start:examples": "vite",
     "test": "vitest"
   },
   "dependencies": {
@@ -59,30 +59,18 @@
     "@typescript-eslint/parser": "^8.59.2",
     "@vitejs/plugin-react": "^6.0.1",
     "@vitest/web-worker": "^4.1.6",
-    "css-loader": "^7.1.4",
     "esbuild": "^0.28.1",
     "eslint": "^9.39.4",
     "eslint-plugin-react": "^7.37.5",
-    "favicons": "^7.2.0",
-    "favicons-webpack-plugin": "^6.0.1",
-    "file-loader": "^6.2.0",
     "globals": "^17.6.0",
     "happy-dom": "^20.9.0",
-    "html-webpack-plugin": "^5.6.7",
-    "mini-css-extract-plugin": "^2.10.2",
     "prettier": "^3.8.3",
     "prismjs": "^1.30.0",
-    "raw-loader": "^4.0.2",
     "react-dom": "^19.2.6",
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.99.0",
-    "sass-loader": "^16.0.8",
-    "ts-loader": "^9.5.7",
     "typescript": "^5.9.3",
     "vite": "^8.0.16",
-    "vitest": "^4.1.7",
-    "webpack": "^5.106.2",
-    "webpack-cli": "^7.0.2",
-    "webpack-dev-server": "^5.2.4"
+    "vitest": "^4.1.7"
   }
 }

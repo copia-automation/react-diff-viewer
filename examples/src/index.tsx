@@ -6,12 +6,9 @@ import "prismjs/components/prism-javascript";
 
 import ReactDiff, { DiffMethod } from "../../lib/index";
 
-// eslint-disable-next-line
-const oldJs = require("./diff/javascript/old.rjs").default;
-// eslint-disable-next-line
-const newJs = require("./diff/javascript/new.rjs").default;
-// eslint-disable-next-line
-const logo = require("../../logo.png");
+import oldJs from "./diff/javascript/old.rjs?raw";
+import newJs from "./diff/javascript/new.rjs?raw";
+import logo from "../../logo.png";
 
 interface ExampleState {
   splitView?: boolean;
