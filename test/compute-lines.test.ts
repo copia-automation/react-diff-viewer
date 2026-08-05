@@ -260,7 +260,7 @@ Also this info`;
           left: {},
         },
       ],
-      diffLines: [0, 2],
+      diffLines: [0, 1],
     });
   });
 
@@ -304,7 +304,7 @@ Also this info`;
           left: {},
         },
       ],
-      diffLines: [0, 2],
+      diffLines: [0, 1],
     });
   });
 
@@ -336,7 +336,7 @@ Also this info`;
           left: {},
         },
       ],
-      diffLines: [0, 2],
+      diffLines: [0, 1],
     });
   });
 
@@ -370,7 +370,7 @@ Also this info`;
           left: {},
         },
       ],
-      diffLines: [0, 2],
+      diffLines: [0, 1],
     });
   });
 });
