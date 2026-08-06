@@ -378,8 +378,8 @@ Publishing to the GitHub package registry is automated by
 1. Bump the `version` field in `package.json` and open a PR.
 2. Merge the PR to `main`.
 3. Create a [GitHub release](https://github.com/copia-automation/react-diff-viewer/releases/new)
-   targeting `main` with a new tag matching the version you just merged — `v4.0.7` or `4.0.7` both
-   work. Publish the release.
+   targeting `main` with a new tag matching the version you just merged — `v<version>` or
+   `<version>` both work. Publish the release.
 4. The `Publish` workflow lints, builds, tests, and runs `npm publish`. Watch it in the
    [Actions tab](https://github.com/copia-automation/react-diff-viewer/actions/workflows/publish.yml).
 5. The published package appears at

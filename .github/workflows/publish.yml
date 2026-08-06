@@ -19,13 +19,12 @@ jobs:
     permissions:
       contents: read # checkout
       packages: write # npm publish to npm.pkg.github.com
-    env:
-      WORKING_DIRECTORY: ./
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.release.tag_name }}
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Verify tag matches package.json version
         env:
@@ -40,8 +39,11 @@ jobs:
 
       - name: Verify tagged commit is on main
         run: |
-          git fetch --no-tags origin main
-          if ! git merge-base --is-ancestor HEAD FETCH_HEAD; then
+          if ! git rev-parse --verify --quiet refs/remotes/origin/main >/dev/null; then
+            echo "::error::Could not resolve origin/main. The checkout step must use fetch-depth: 0."
+            exit 1
+          fi
+          if ! git merge-base --is-ancestor HEAD refs/remotes/origin/main; then
             echo "::error::The tagged commit is not an ancestor of main. Only commits merged to main may be released."
             exit 1
           fi
@@ -50,8 +52,6 @@ jobs:
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
-          cache: 'yarn'
-          cache-dependency-path: '${{ env.WORKING_DIRECTORY }}/yarn.lock'
           registry-url: 'https://npm.pkg.github.com'
           scope: '@copia-automation'
 
