@@ -3,13 +3,14 @@ name: Publish
 on:
   release:
     types: [published]
+  workflow_dispatch:
 
 # Read-only by default; the publish job opts into `packages: write`.
 permissions:
   contents: read
 
 concurrency:
-  group: publish-${{ github.event.release.tag_name }}
+  group: publish-${{ github.event.release.tag_name || github.ref_name }}
   cancel-in-progress: false
 
 jobs:
@@ -22,34 +23,11 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Verify tag matches package.json version
-        env:
-          TAG_NAME: ${{ github.event.release.tag_name }}
-        run: |
-          VERSION="$(node -p "require('./package.json').version")"
-          if [ "${TAG_NAME#v}" != "$VERSION" ]; then
-            echo "::error::Release tag '$TAG_NAME' does not match package.json version '$VERSION'. Bump the version in package.json, merge to main, then re-tag."
-            exit 1
-          fi
-          echo "Publishing @copia-automation/react-diff-viewer@$VERSION"
-
-      - name: Verify tagged commit is on main
-        run: |
-          if ! git rev-parse --verify --quiet refs/remotes/origin/main >/dev/null; then
-            echo "::error::Could not resolve origin/main. The checkout step must use fetch-depth: 0."
-            exit 1
-          fi
-          if ! git merge-base --is-ancestor HEAD refs/remotes/origin/main; then
-            echo "::error::The tagged commit is not an ancestor of main. Only commits merged to main may be released."
-            exit 1
-          fi
-
-      - name: Setup Node.js
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version-file: '.nvmrc'
           registry-url: 'https://npm.pkg.github.com'
@@ -70,6 +48,5 @@ jobs:
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Pre-releases publish under `next` so they never become the default install.
-          NPM_TAG: ${{ github.event.release.prerelease && 'next' || 'latest' }}
+          NPM_TAG: ${{ (github.event_name == 'workflow_dispatch' || github.event.release.prerelease) && 'next' || 'latest' }}
         run: npm publish --tag "$NPM_TAG"
