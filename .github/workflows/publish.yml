@@ -48,5 +48,26 @@ jobs:
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TAG: ${{ (github.event_name == 'workflow_dispatch' || github.event.release.prerelease) && 'next' || 'latest' }}
-        run: npm publish --tag "$NPM_TAG"
+          PUBLISH_NEXT: ${{ (github.event_name == 'workflow_dispatch' || github.event.release.prerelease) && 'true' || 'false' }}
+        run: |
+          if [ "$PUBLISH_NEXT" != 'true' ]; then
+            npm publish --tag latest
+            exit 0
+          fi
+
+          NAME="$(node -p 'require("./package.json").name')"
+          VERSION="$(node -p 'require("./package.json").version')"
+
+          # `next` must only ever point at a prerelease version, e.g. 4.1.0-rc.1.
+          if [[ "${VERSION%%+*}" != *-* ]]; then
+            echo "::error::Refusing to publish stable version $VERSION to the next tag; bump package.json to a prerelease version first."
+            exit 1
+          fi
+
+          # A manual run on an already-published prerelease only moves the tag.
+          if npm view "$NAME@$VERSION" version >/dev/null 2>&1; then
+            echo "$NAME@$VERSION is already published; retagging as next."
+            npm dist-tag add "$NAME@$VERSION" next
+          else
+            npm publish --tag next
+          fi
