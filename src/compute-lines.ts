@@ -269,9 +269,14 @@ const computeLineInformation = (
         right.value = line;
       }
 
-      counter += 1;
-
+      // `counter` tracks the index of the line inside `lineInformation`, which
+      // is what `diffLines` records. The lookahead pass (`isRetrieveNext`) only
+      // borrows the right side of an already-counted modification line, so it
+      // must not advance the counter - otherwise `diffLines` drifts ahead of
+      // the real line indexes by one for every modification, which pushes the
+      // "Expand x lines ..." indicator below the diff block it belongs to.
       if (!isRetrieveNext) {
+        counter += 1;
         lineInformation.push({
           left,
           right,
