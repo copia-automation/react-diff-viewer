@@ -1,5 +1,6 @@
 ## Copia Notes
-This fork contains a small modification. The ReactDiffView component now has an added `renderNodeWrapper` property, which is a function to render the diff nodes (aka table rows) with a wrapper. 
+
+This fork contains a small modification. The ReactDiffView component now has an added `renderNodeWrapper` property, which is a function to render the diff nodes (aka table rows) with a wrapper.
 
 Keep in mind that since this package isn't published to npm, any modifications need to be built using `npm run build` and commited to this repo.
 
@@ -31,8 +32,8 @@ npm i react-diff-viewer
 ## Usage
 
 ```javascript
-import React, { PureComponent } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
+import React, { PureComponent } from 'react'
+import ReactDiffViewer from 'react-diff-viewer'
 
 const oldCode = `
 const a = 10
@@ -44,7 +45,7 @@ if(a > 10) {
 }
 
 console.log('done')
-`;
+`
 const newCode = `
 const a = 10
 const boo = 10
@@ -52,14 +53,14 @@ const boo = 10
 if(a === 10) {
   console.log('bar')
 }
-`;
+`
 
 class Diff extends PureComponent {
   render = () => {
     return (
       <ReactDiffViewer oldValue={oldCode} newValue={newCode} splitView={true} />
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -106,8 +107,8 @@ An example using [Prism JS](https://prismjs.com)
 ```
 
 ```javascript
-import React, { PureComponent } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
+import React, { PureComponent } from 'react'
+import ReactDiffViewer from 'react-diff-viewer'
 
 const oldCode = `
 const a = 10
@@ -119,7 +120,7 @@ if(a > 10) {
 }
 
 console.log('done')
-`;
+`
 const newCode = `
 const a = 10
 const boo = 10
@@ -127,17 +128,17 @@ const boo = 10
 if(a === 10) {
   console.log('bar')
 }
-`;
+`
 
 class Diff extends PureComponent {
-  highlightSyntax = str => (
+  highlightSyntax = (str) => (
     <pre
       style={{ display: 'inline' }}
       dangerouslySetInnerHTML={{
-        __html: Prism.highlight(str, Prism.languages.javascript),
+        __html: Prism.highlight(str, Prism.languages.javascript)
       }}
     />
-  );
+  )
 
   render = () => {
     return (
@@ -147,8 +148,8 @@ class Diff extends PureComponent {
         splitView={true}
         renderContent={this.highlightSyntax}
       />
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -169,22 +170,22 @@ enum DiffMethod {
 ```
 
 ```javascript
-import React, { PureComponent } from 'react';
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
+import React, { PureComponent } from 'react'
+import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
 
 const oldCode = `
 {
   "name": "Original name",
   "description": null
 }
-`;
+`
 const newCode = `
 {
   "name": "My updated name",
   "description": "Brand new description",
   "status": "running"
 }
-`;
+`
 
 class Diff extends PureComponent {
   render = () => {
@@ -195,8 +196,8 @@ class Diff extends PureComponent {
         compareMethod={DiffMethod.WORDS}
         splitView={true}
       />
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -293,8 +294,8 @@ To override any style, just pass the new style object to the `styles` prop. New 
 For keys other than `variables`, the value can either be an object or string interpolation.
 
 ```javascript
-import React, { PureComponent } from 'react';
-import ReactDiffViewer from 'react-diff-viewer';
+import React, { PureComponent } from 'react'
+import ReactDiffViewer from 'react-diff-viewer'
 
 const oldCode = `
 const a = 10
@@ -306,7 +307,7 @@ if(a > 10) {
 }
 
 console.log('done')
-`;
+`
 const newCode = `
 const a = 10
 const boo = 10
@@ -314,33 +315,33 @@ const boo = 10
 if(a === 10) {
   console.log('bar')
 }
-`;
+`
 
 class Diff extends PureComponent {
-  highlightSyntax = str => (
+  highlightSyntax = (str) => (
     <span
       style={{ display: 'inline' }}
       dangerouslySetInnerHTML={{
-        __html: Prism.highlight(str, Prism.languages.javascript),
+        __html: Prism.highlight(str, Prism.languages.javascript)
       }}
     />
-  );
+  )
 
   render = () => {
     const newStyles = {
       variables: {
         dark: {
           highlightBackground: '#fefed5',
-          highlightGutterBackground: '#ffcd3c',
-        },
+          highlightGutterBackground: '#ffcd3c'
+        }
       },
       line: {
         padding: '10px 2px',
         '&:hover': {
-          background: '#a26ea1',
-        },
-      },
-    };
+          background: '#a26ea1'
+        }
+      }
+    }
 
     return (
       <ReactDiffViewer
@@ -350,8 +351,8 @@ class Diff extends PureComponent {
         splitView={true}
         renderContent={this.highlightSyntax}
       />
-    );
-  };
+    )
+  }
 }
 ```
 
@@ -369,20 +370,20 @@ Check package.json for more build scripts.
 
 MIT
 
-## Publish this package to github package registry
+## Releasing
 
-1. Run `yarn build`
-2. Generate a Personal Access Token (PAT)
-  a. Navigate to "github.com" > "settings"
-  b. Click on "Developer Settings"
-  c. Click on "Personal Access Tokens"
-  d. Click on "Tokens (classic)"
-  e. Click on "Generate New Token"
-  f. Enable read/write packages and create token
-  g. Save the token to 1password
-3. In your cli enter: `npm login --registry=https://npm.pkg.github.com`
-4. Enter your github username
-5. Enter your new PAT as the password
-6. If prompted, enter your email
-7. Version and run `npm publish`
-8. Navigate to the copia-automation package repository to view your package: https://github.com/copia-automation/acd-parser/pkgs/npm/acd-parser
+Publishing to the GitHub package registry is automated by
+[`.github/workflows/publish.yml`](.github/workflows/publish.yml).
+
+1. Bump the `version` field in `package.json` and open a PR.
+2. Merge the PR to `main`.
+3. Create a [GitHub release](https://github.com/copia-automation/react-diff-viewer/releases/new)
+   targeting `main` with a new tag matching the version you just merged — `v4.0.7` or `4.0.7` both
+   work. Publish the release.
+4. The `Publish` workflow lints, builds, tests, and runs `npm publish`. Watch it in the
+   [Actions tab](https://github.com/copia-automation/react-diff-viewer/actions/workflows/publish.yml).
+5. The published package appears at
+   https://github.com/copia-automation/react-diff-viewer/pkgs/npm/react-diff-viewer.
+
+Releases marked as a pre-release publish under the `next` dist-tag instead of `latest`, so they
+won't be installed by default.

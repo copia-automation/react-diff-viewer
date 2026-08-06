@@ -1,0 +1,75 @@
+name: Publish
+
+on:
+  release:
+    types: [published]
+
+# Read-only by default; the publish job opts into `packages: write`.
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish to GitHub Packages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read # checkout
+      packages: write # npm publish to npm.pkg.github.com
+    env:
+      WORKING_DIRECTORY: ./
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+
+      - name: Verify tag matches package.json version
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          if [ "${TAG_NAME#v}" != "$VERSION" ]; then
+            echo "::error::Release tag '$TAG_NAME' does not match package.json version '$VERSION'. Bump the version in package.json, merge to main, then re-tag."
+            exit 1
+          fi
+          echo "Publishing @copia-automation/react-diff-viewer@$VERSION"
+
+      - name: Verify tagged commit is on main
+        run: |
+          git fetch --no-tags origin main
+          if ! git merge-base --is-ancestor HEAD FETCH_HEAD; then
+            echo "::error::The tagged commit is not an ancestor of main. Only commits merged to main may be released."
+            exit 1
+          fi
+
+      - name: Setup Node.js
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'yarn'
+          cache-dependency-path: '${{ env.WORKING_DIRECTORY }}/yarn.lock'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@copia-automation'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Lint
+        run: yarn lint
+
+      - name: Build
+        run: yarn build
+
+      - name: Test
+        run: yarn test
+
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Pre-releases publish under `next` so they never become the default install.
+          NPM_TAG: ${{ github.event.release.prerelease && 'next' || 'latest' }}
+        run: npm publish --tag "$NPM_TAG"

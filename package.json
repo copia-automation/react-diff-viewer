@@ -1,6 +1,6 @@
 {
   "name": "@copia-automation/react-diff-viewer",
-  "version": "4.0.6",
+  "version": "4.0.7",
   "private": false,
   "description": "A simple and beautiful text diff viewer component made with diff and React",
   "keywords": [
@@ -24,6 +24,10 @@
   },
   "license": "MIT",
   "author": "Copia Automation (originally Pranesh Ravi <praneshpranesh@gmail.com>)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/copia-automation/react-diff-viewer.git"
+  },
   "main": "lib/index",
   "typings": "lib/index",
   "scripts": {
