@@ -29,9 +29,7 @@ jobs:
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version-file: '.nvmrc'
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@copia-automation'
+          node-version-file: ".nvmrc"
 
       - name: Install dependencies
         run: yarn install --frozen-lockfile
@@ -44,6 +42,15 @@ jobs:
 
       - name: Test
         run: yarn test
+
+      # Registry auth is configured here, not in the setup-node step above
+      # Dummy NODE_AUTH_TOKEN was removed in v7 and can cause failures in yarn/npm if not set (we only set in Publish step below)
+      - name: Configure registry auth
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: ".nvmrc"
+          registry-url: "https://npm.pkg.github.com"
+          scope: "@copia-automation"
 
       - name: Publish
         env:
