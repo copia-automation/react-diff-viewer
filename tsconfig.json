@@ -1,9 +1,11 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
+    "strict": false,
+    "rootDir": "./src",
     "jsx": "react",
     "module": "esnext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noImplicitAny": true,
     "target": "es6",
     "declaration": true,
