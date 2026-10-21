@@ -61,8 +61,8 @@
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/eslint-plugin": "^8.69.0",
     "@typescript-eslint/parser": "^8.69.0",
-    "@vitejs/plugin-react": "^6.1.1",
-    "@vitest/web-worker": "^4.1.11",
+    "@vitejs/plugin-react": "^6.1.2",
+    "@vitest/web-worker": "^5.0.5",
     "esbuild": "^0.28.2",
     "eslint": "^10.9.1",
     "eslint-plugin-react": "^7.37.5",
@@ -74,7 +74,7 @@
     "resize-observer-polyfill": "^1.5.1",
     "sass": "^1.103.1",
     "typescript": "^6.0.3",
-    "vite": "^8.2.2",
-    "vitest": "^4.1.11"
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   }
 }
