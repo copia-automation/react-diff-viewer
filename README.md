@@ -375,15 +375,25 @@ MIT
 Publishing to the GitHub package registry is automated by
 [`.github/workflows/publish.yml`](.github/workflows/publish.yml).
 
-1. Bump the `version` field in `package.json` and open a PR.
+1. Bump the `version` field in `package.json` (e.g. `npm version minor --no-git-tag-version`)
+   and open a PR.
 2. Merge the PR to `main`.
 3. Create a [GitHub release](https://github.com/copia-automation/react-diff-viewer/releases/new)
-   targeting `main` with a new tag matching the version you just merged — `v<version>` or
-   `<version>` both work. Publish the release.
-4. The `Publish` workflow lints, builds, tests, and runs `npm publish`. Watch it in the
+   targeting `main` with a new tag `v<version>` matching the version you just merged. Publish
+   the release.
+4. The `Publish` workflow checks the tag matches `package.json`, then lints, builds, tests, and
+   runs `npm publish`. Watch it in the
    [Actions tab](https://github.com/copia-automation/react-diff-viewer/actions/workflows/publish.yml).
 5. The published package appears at
    https://github.com/copia-automation/react-diff-viewer/pkgs/npm/react-diff-viewer.
 
 Releases marked as a pre-release publish under the `next` dist-tag instead of `latest`, so they
-won't be installed by default.
+won't be installed by default. The workflow refuses to publish a pre-release version (like
+`4.1.0-rc.1`) to `latest` or a stable version to `next`.
+
+If the workflow fails, fix the problem and re-run it from the Actions tab; a version that's
+already published is skipped. If the fix needs a new commit, delete the release and its tag,
+then create the release again on the fixed commit.
+
+Publishing doesn't ship anything to users: consumers such as `gitea-fork`
+(`copia/gui/package.json`) still need to bump their pinned version.
