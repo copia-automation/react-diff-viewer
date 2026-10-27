@@ -72,7 +72,7 @@
     "prismjs": "1.30.0",
     "react-dom": "19.3.1",
     "resize-observer-polyfill": "1.5.1",
-    "sass": "1.103.1",
+    "sass": "1.106.1",
     "typescript": "6.0.3",
     "vite": "8.3.5",
     "vitest": "5.0.5"
