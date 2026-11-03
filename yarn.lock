@@ -711,10 +711,17 @@
   resolved "https://registry.yarnpkg.com/@types/json-schema/-/json-schema-7.0.15.tgz#596a1747233694d50f6ad8a7869fcb6f56cf5841"
   integrity sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==
 
-"@types/node@*", "@types/node@26.6.5", "@types/node@>=20.0.0":
+"@types/node@*", "@types/node@>=20.0.0":
   version "26.6.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-26.6.5.tgz#cb35209e7767c503551b5fa42a48231c7441d979"
   integrity sha512-uMzsv9stDdofIZBx4UGh4Z9ZgXnGC9seRDscilBcTHAeOFk67MZg/k9bWVfO+bk4qZmG+l52hRnLwUiH2LnJTg==
+  dependencies:
+    undici-types "~8.9.0"
+
+"@types/node@26.6.6":
+  version "26.6.6"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-26.6.6.tgz#9ed7b5817e728ed9216ef7c5b7d373fe3b777104"
+  integrity sha512-MzQj+8Kx3XI40OmUAE6Qoh58ZMNstNNMwn2nfd3qWsfe7nDNSqJNzes4njhz6AHwrSHOffSLwXU6yb474Q4aog==
   dependencies:
     undici-types "~8.9.0"
 
@@ -2514,9 +2521,9 @@ react-is@^17.0.1:
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
 react-virtuoso@^4.18.7:
-  version "4.18.19"
-  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.18.19.tgz#1cc918ba0179550f0129edd05af0d3855ec6c64b"
-  integrity sha512-dewyZisA5IiQTldh7eHM5KpI+qxi0nKRVYi2iM01XmPkNa5tjvVUKJKAIc6ted1hAK1/NFlXuhXpVYqGHHdcdQ==
+  version "4.18.20"
+  resolved "https://registry.yarnpkg.com/react-virtuoso/-/react-virtuoso-4.18.20.tgz#115d90706ce1ed73b1ef2a9b545bbdf0663a4b73"
+  integrity sha512-2G/Hdi/QHRtJtzSZOkAwJFdUzBmhNIQCAmw6gLGUZTGbjVL6+TOBIFJOCnpm6xgWGBfrrMiZV5rJNkQ9gEgAdQ==
 
 react@^19.2.6:
   version "19.3.1"
