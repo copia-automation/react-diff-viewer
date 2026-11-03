@@ -64,7 +64,7 @@
     "@vitejs/plugin-react": "6.1.2",
     "@vitest/web-worker": "5.0.5",
     "esbuild": "0.28.2",
-    "eslint": "10.13.0",
+    "eslint": "10.14.0",
     "eslint-plugin-react": "7.37.5",
     "globals": "17.13.0",
     "happy-dom": "21.0.4",
